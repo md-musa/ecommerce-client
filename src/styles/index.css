@@ -1,0 +1,88 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  .link {
+    @apply hover:underline cursor-pointer;
+  }
+  .quantity-btn {
+    @apply p-1 rounded-full bg-yellow-500 w-10 mx-2 text-xl font-bold;
+  }
+
+  .com-input {
+    @apply py-6 px-5 my-1 w-full h-2 text-lg hover:bg-gray-50 rounded-md border outline-none shadow-lg;
+  }
+
+  .btn-primary {
+    @apply py-1 mt-2 w-full text-xl text-gray-800 bg-yellow-400 hover:bg-yellow-500 rounded-md shadow-md;
+  }
+  .btn-secondary {
+    @apply mt-2 w-full h-10 text-lg bg-gray-100 hover:bg-gray-200 rounded-md border outline-none;
+  }
+}
+.hrDash {
+  border-style: none;
+  border-top-style: dashed;
+  border-color: rgb(230, 230, 230);
+  border-width: 1px;
+}
+hr {
+  border-color: rgb(207, 207, 207);
+}
+.card {
+  backdrop-filter: blur(2px);
+  background-color: rgb(231 209 189 / 49%);
+  border-radius: 10px;
+  padding: 50px 20px;
+  text-shadow: 2px 3px 9px rgb(159 159 159 / 76%);
+}
+
+.category-blur {
+  -webkit-backdrop-filter: blur(2px);
+  background: #ffffff2e;
+  backdrop-filter: blur(6px);
+  /* background-color: rgb(128 135 151); */
+  /* border-radius: 10px; */
+  /* padding: 50px 20px; */
+  text-shadow: 2px 3px 9px rgb(159 159 159 / 76%);
+}
+.text-shadow {
+  text-shadow: 2px 1px 3px rgba(248, 248, 248, 0.31);
+}
+body {
+  /* background-color: #ffc297; */
+}
+.blur-bg {
+  /* From https://css.glass */
+  background: #fffffff0;
+  /* border-radius: 16px; */
+  /* box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); */
+  backdrop-filter: blur(11.8px);
+  -webkit-backdrop-filter: blur(11.8px);
+  /* border: 1px solid rgba(255, 255, 255, 0.06); */
+}
+
+/* :root {
+  --color-primary: #2584ff;
+  --color-secondary: #00d9ff;
+  --color-accent: #ff3400;
+  --color-heading: #1b0760;
+  --color-body: #ededed;
+}
+
+
+html {
+  font-size: 62.5%;
+  box-sizing: border-box;
+}
+
+body {
+  font-size: 1.6rem;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}  */

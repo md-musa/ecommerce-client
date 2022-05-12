@@ -1,0 +1,28 @@
+Tasks
+-> class grouping 
+-> utils components
+-> router setup
+-> private route setup
+-> 
+
+-> navbar 
+-> dynamic categories
+-> filter
+-> link category product to product details
+-> implement searching
+-> show related products by searching category !) show without current item
+-> Private Route
+-> animation
+-> test the application
+-> multi image show
+-> reset filtering
+-> implement search button
+
+
+
+=> Bugs
+-> make float number and show 2 digit after dot
+-> searching items does not showing
+-> Fix z-index related issues
+-> Max price will be the maximum price of all products. Min will be as well as Max price.
+-> If rating is gater than 0.5 show half star.
