@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
-import axios from '../services/axiosConfig';
 import Navbar from '../components/Navbar';
-import { addItem } from '../store/cartSlice';
+import { addItem } from '../stores/cartSlice';
 import Rating from '../components/Rating';
 import useProgress from '../hooks/useProgress';
 import ProductCard from '../components/ProductCard';
+import axios from '../config/axiosConfig';
 
 function ProductDetails() {
   const { id } = useParams();
@@ -26,8 +26,9 @@ function ProductDetails() {
     async function getProduct() {
       try {
         const { data } = await axios.get(`/products/${id}`);
+        console.log('DATA', data);
         setItem(data);
-        setCategoryName(data.category);
+        getProductByCategory(data.category);
         window.scrollTo(0, 0);
       } catch (err) {
         console.log('Error=>', err);
@@ -36,18 +37,16 @@ function ProductDetails() {
     getProduct();
   }, [id]);
 
-  useEffect(() => {
-    const getProductByCategory = async () => {
-      try {
-        const { data } = await axios.get(`products/category/${categoryName}`);
-        const products = data.products.filter(item => item.id != id);
-        setCategoryItems(products);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    getProductByCategory();
-  }, [categoryName, id]);
+  const getProductByCategory = async category => {
+    try {
+      const { data } = await axios.get(`products/categories/${category}`);
+      console.log(data);
+      // const products = data.products.filter(item => item._id != id);
+      setCategoryItems(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>
@@ -57,7 +56,7 @@ function ProductDetails() {
           <div className=" place-content-center">
             <img
               className="w-auto object-contain"
-              src={item.thumbnail}
+              src={item.images[0]}
               alt=""
             />
             {/* Other images */}
@@ -66,8 +65,8 @@ function ProductDetails() {
             <h3 className="text-gray-600 text-4xl my-3">{item.title}</h3>
 
             <div className="flex items-center my-3">
-              <Rating rating={item.rating} />
-              <span className="text-xl">{`  ${item.rating}`}</span>
+              {/* <Rating rating={item.rating} /> */}
+              {/* <span className="text-xl">{`  ${item.rating}`}</span> */}
             </div>
 
             <span className="font-bold text-2xl">
@@ -102,7 +101,7 @@ function ProductDetails() {
       {categoryItems && (
         <div className="grid rounded-sm md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 ">
           {categoryItems.map(item => (
-            <ProductCard product={item} key={item.id} />
+            <ProductCard product={item} key={item._id} />
           ))}
         </div>
       )}

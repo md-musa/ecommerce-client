@@ -17,6 +17,7 @@ Tasks
 -> multi image show
 -> reset filtering
 -> implement search button
+-> Best selling products
 
 
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { MenuIcon, ShoppingCartIcon } from '@heroicons/react/outline';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { Avatar } from '@mui/material';
@@ -10,28 +10,19 @@ import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import CloseIcon from '@mui/icons-material/Close';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import useAuth from '../hooks/useAuth';
-import axios from '../services/axiosConfig';
-import SearchedProduct from './SearchedProduct';
+import SearchedProduct from '../components/SearchedProduct';
+import { getSearchProduct } from '../services/product';
+import AccountMenu from './AccountMenu';
 
 function Navbar() {
-  const cartItems = useSelector(state => state.cart.products);
   const auth = useAuth();
   const navigate = useNavigate();
+  const cartItems = useSelector(state => state.cart.products);
   const [searchedProducts, setSearchedProducts] = useState([]);
   const [productName, setProductName] = useState('');
 
   useEffect(() => {
-    async function searchProduct() {
-      try {
-        const response = await axios.get(
-          `/products/search?q=${productName}&limit=7`
-        );
-        setSearchedProducts(response.data.products);
-      } catch (err) {
-        console.log('error --> ', err);
-      }
-    }
-    searchProduct();
+    getSearchProduct(productName).then(res => setSearchedProducts(res.data));
   }, [productName]);
 
   return (
@@ -88,7 +79,7 @@ function Navbar() {
               </div>
               {searchedProducts.map(item => (
                 <SearchedProduct
-                  key={item.id}
+                  key={item._id}
                   setProductName={setProductName}
                   product={item}
                 />
@@ -112,13 +103,7 @@ function Navbar() {
           </Link>
           <div className="cursor-pointer hover:underline flex items-center relative">
             {auth.user ? (
-              <div className="flex space-x-3 items-center">
-                <Avatar
-                  className="ring-2 ring-[#f95a5994] mx-1"
-                  alt="Md. Musa"
-                  src={auth.user.image}
-                />
-              </div>
+              <AccountMenu />
             ) : (
               <Link to="/signIn">
                 <button className="bg-[#951df7] hover:bg-[#9332e3] px-2 md:px-6 py-1 mx-1 md:mx-4 outline-none cursor-pointer text-white font-semibold rounded-full shadow-md">

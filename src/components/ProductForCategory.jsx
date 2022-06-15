@@ -3,7 +3,7 @@ import {
   decreaseQuantity,
   increaseQuantity,
   removeItem,
-} from '../store/cartSlice';
+} from '../stores/cartSlice';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Rating from './Rating';
@@ -14,7 +14,7 @@ import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import { Link } from 'react-router-dom';
 
 function ProductForCategory(props) {
-  const { title, thumbnail, price, id, rating } = props.product;
+  const { title, images, price, _id, rating } = props.product;
 
   const [quantity, setQuantity] = useState(1);
   const dispatch = useDispatch();
@@ -22,21 +22,21 @@ function ProductForCategory(props) {
   return (
     <>
       <div className="grid grid-cols-[1fr_3fr] my-2">
-        <Link to={`/productDetails/${id}`}>
+        <Link to={`/products/${_id}`}>
           <div className="flex items-center p-1 justify-center">
-            <img alt="" className="h-full w-full rounded-md" src={thumbnail} />
+            <img alt="" className="h-full w-full rounded-md" src={images[0]} />
           </div>
         </Link>
         <div className="px-3">
-          <Link to={`/productDetails/${id}`}>
+          <Link to={`/products/${_id}`}>
             <p className="my-2 hover:underline font-semibold text-xl text-gray-800">
               {title}
             </p>
           </Link>
           <div className="items-center my-2 flex">
             <span className="text-gray-600 mx-2 flex items-center">
-              <span className="font-semibold mr-2">{rating}</span>
-              {<Rating rating={rating} />}
+              {/* <span className="font-semibold mr-2">{rating}</span> */}
+              {/* {<Rating rating={rating} />} */}
               <span className="text-[#e4ae06] mx-2 font-semibold"></span>
             </span>
           </div>

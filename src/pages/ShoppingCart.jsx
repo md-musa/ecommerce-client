@@ -33,7 +33,7 @@ function ShoppingCart() {
               <hr />
 
               {cartItems.map(item => (
-                <CartProduct product={item} key={item.id} />
+                <CartProduct product={item} key={item._id} />
               ))}
               <div className="flex justify-between mt-2 text-gray-600">
                 <p className="p-1 text-xl"> Subtotal</p>

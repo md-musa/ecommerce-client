@@ -2,9 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import ProductCard from '../components/ProductCard';
+import axios from '../config/axiosConfig';
 import useProgress from '../hooks/useProgress';
-import axios from '../services/axiosConfig';
-
 function SearchProducts() {
   const progress = useProgress();
   const { title } = useParams();
@@ -32,7 +31,7 @@ function SearchProducts() {
 
       <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {products.map(product => (
-          <ProductCard product={product} />
+          <ProductCard product={product} key={product._id} />
         ))}
       </div>
     </>

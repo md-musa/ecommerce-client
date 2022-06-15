@@ -1,13 +1,15 @@
-import { addProducts } from '../store/productsSlice';
+import { addProducts } from '../stores/productsSlice';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, Outlet } from 'react-router-dom';
 import Banner from '../components/Banner';
 import Navbar from '../components/Navbar';
 import ProductFeed from '../components/ProductFeed';
-import axios from '../services/axiosConfig';
 import useProgress from '../hooks/useProgress';
 import ShopByCategory from '../components/ShopByCategory';
+import axios from '../config/axiosConfig';
+import { Divider } from '@mui/material';
+import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
 
 function Home() {
   const dispatch = useDispatch();
@@ -22,7 +24,7 @@ function Home() {
         const { data } = await axios.get(`/products`);
         dispatch(addProducts(data.products));
       } catch (err) {
-        console.log('Error=>', err);
+        console.log('Error', err.stack);
       }
     }
     fetchProducts();
@@ -33,20 +35,20 @@ function Home() {
       <main className="mx-auto max-w-screen-2xl">
         <Banner />
 
-        <section>
-          <p className="font-semibold text-xl md:text-2xl my-2 mx-7 text-gray-500">
+        <section className="-my-60">
+          {/* <p className="font-semibold text-xl md:text-2xl my-2 mx-7 text-gray-500">
             Shop by Category
-          </p>
+          </p> */}
           <ShopByCategory />
           <p className="text-yellow-500 hover:text-yellow-600 my-2 text-xl text-right mx-6">
             <Link to="/categories" className="cursor-pointer">
               View All
-              {/* <ArrowRightAltIcon /> */}
+              <ArrowRightAltIcon />
             </Link>
           </p>
-        </section>
 
-        <ProductFeed />
+          <ProductFeed />
+        </section>
       </main>
     </>
   );

@@ -1,15 +1,14 @@
-import { StarIcon } from '@heroicons/react/solid';
 import React from 'react';
-// import Currency from 'react-currency-formatter';
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-import { addItem } from '../store/cartSlice';
+import { addItem } from '../stores/cartSlice';
 import Rating from './Rating';
 
 function ProductCard(props) {
   const navigate = useNavigate();
-  const { id, title, thumbnail, rating, price, discountPercentage } =
+  const { _id, title, images, rating, price, discountPercentage } =
     props.product;
+
   const dispatch = useDispatch();
 
   function addToCart(product) {
@@ -20,24 +19,24 @@ function ProductCard(props) {
     <div className="flex flex-col justify-between p-4 m-5 bg-gray-100 shadow-md rounded-md">
       <div>
         <div
-          onClick={() => navigate(`/productDetails/${id}`)}
+          onClick={() => navigate(`/products/${_id}`)}
           className="flex cursor-pointer items-center justify-center"
         >
           <img
             alt=""
             className="h-full w-full object-contain rounded-md"
             loading="lazy"
-            src={thumbnail}
+            src={images[0]}
           />
         </div>
         <p
-          onClick={() => navigate(`/productDetails/${id}`)}
+          onClick={() => navigate(`/products/${_id}`)}
           className="my-2 hover:underline cursor-pointer font-semibold text-xl"
         >
           {title}
         </p>
         <div className="flex items-center my-2">
-          <Rating rating={rating} />
+          {/* <Rating rating={rating} /> */}
         </div>
         <p className="font-semibold text-xl text-gray-700">
           ${price.toFixed(2)}

@@ -1,7 +1,35 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from '../config/axiosConfig';
+import { addUserInfo } from '../stores/authSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { ConnectingAirportsOutlined } from '@mui/icons-material';
+import { signUpUser } from '../services/auth';
+const from = location.state?.from?.pathname || '/';
 
 function SignUp() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const location = useLocation();
+
+  const handleSignUp = e => {
+    e.preventDefault();
+
+    signUpUser(name, email, password).then(res => {
+      dispatch(
+        addUserInfo({
+          _id: res.data._id,
+          token: res.data.token,
+          role: res.data.role,
+        })
+      );
+      navigate(from, { replace: true });
+    });
+  };
+
   return (
     <div className="grid h-screen sm:grid-cols-[1fr_2fr]">
       <div className="border hidden sm:flex items-center justify-center bg-cover bg-[url('https://images.unsplash.com/photo-1643622000342-65f9fdeb50d9?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1yZWxhdGVkfDIwfHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=500&q=60')]">
@@ -17,11 +45,13 @@ function SignUp() {
         <div className="w-4/5 sm:w-3/5 md:w-1/2">
           <h1 className="my-5 text-3xl">Create a account</h1>
 
-          <form className="m-auto">
+          <form className="m-auto" onSubmit={handleSignUp}>
             <input
               className="com-input"
               type="text"
               placeholder="Name"
+              value={name}
+              onChange={e => setName(e.target.value)}
               required
             />
             <br />
@@ -30,6 +60,8 @@ function SignUp() {
               className="com-input"
               type="email"
               placeholder="Email Address"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
               required
             />
             <br />
@@ -38,6 +70,8 @@ function SignUp() {
               className="com-input"
               type="password"
               placeholder="Password"
+              value={password}
+              onChange={e => setPassword(e.target.value)}
               required
             />
             <br />

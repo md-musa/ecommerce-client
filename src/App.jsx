@@ -10,6 +10,9 @@ import Categories from './pages/Categories';
 import ProductsByCategory from './pages/ProductsByCategory';
 import SignIn from './pages/SignIn';
 import SearchProducts from './pages/SearchProducts';
+import MyOrder from './pages/MyOrder';
+import WishList from './pages/WishList';
+import MyAccount from './pages/MyAccount';
 
 export default function App() {
   return (
@@ -18,10 +21,16 @@ export default function App() {
       <Route path="/signUp" element={<SignUp />} />
       <Route path="/signIn" element={<SignIn />} />
       <Route path="/categories" element={<Categories />} />
-      <Route path="/category/:title" element={<ProductsByCategory />} />
+      <Route
+        path="/categories/:categoryName"
+        element={<ProductsByCategory />}
+      />
       <Route path="/cart" element={<ShoppingCart />} />
+      <Route path="/myOrder" element={<MyOrder />} />
+      <Route path="/wishList" element={<WishList />} />
+      <Route path="/myAccount" element={<MyAccount />} />
       <Route path="/cart/checkout" element={<CheckOut />} />
-      <Route path="/productDetails/:id" element={<ProductDetails />} />
+      <Route path="/products/:id" element={<ProductDetails />} />
       <Route path="/product/search/:title" element={<SearchProducts />} />
       <Route path="*" element={<NotFound />} />
     </Routes>

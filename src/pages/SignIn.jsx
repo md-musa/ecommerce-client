@@ -1,43 +1,33 @@
-import axios from '../services/axiosConfig';
-import { addUserInfo } from '../store/authSlice';
+import { addUserInfo } from '../stores/authSlice';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { signIn } from '../services/auth';
 
 function SignIn() {
   const dispatch = useDispatch();
-  const [username, setUsername] = useState('kminchelle');
-  const [password, setPassword] = useState('0lelplR');
-  const [error, setError] = useState(false);
-  const [loading, setLoading] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
+  const [error, setError] = useState();
   const from = location.state?.from?.pathname || '/';
 
-  async function handleSubmit(e) {
+  const [email, setEmail] = useState('mohammad.musa706@gmail.com');
+  const [password, setPassword] = useState('123456l');
+
+  const handleSubmit = e => {
     e.preventDefault();
 
-    try {
-      const { data } = await axios.post(
-        `/auth/login`,
-        JSON.stringify({ username, password }),
-        {
-          headers: { 'Content-Type': 'application/json' },
-        }
+    signIn(email, password).then(res => {
+      dispatch(
+        addUserInfo({
+          _id: res.data._id,
+          token: res.data.token,
+          role: res.data.role,
+        })
       );
-      dispatch(addUserInfo({ username, token: data.token, image: data.image }));
       navigate(from, { replace: true });
-    } catch (err) {
-      console.log(err);
-      if (err.response.status === 401) {
-        setError('Invalid username or password');
-      } else if (err.response.status === 500) {
-        setError('Internal server error');
-      } else if (err.response.status === 404) {
-        setError('Not found');
-      }
-    }
-  }
+    });
+  };
 
   return (
     <div className="grid h-screen sm:grid-cols-[1fr_2fr]">
@@ -58,9 +48,9 @@ function SignIn() {
             <input
               className="com-input"
               type="text"
-              onChange={e => setUsername(e.target.value)}
-              value={username}
-              placeholder="Username"
+              onChange={e => setEmail(e.target.value)}
+              value={email}
+              placeholder="Enter you email"
               required
             />
             <br />
@@ -69,7 +59,7 @@ function SignIn() {
               type="password"
               value={password}
               onChange={e => setPassword(e.target.value)}
-              placeholder="Password"
+              placeholder="Enter your password"
               required
             />
 

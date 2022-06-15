@@ -15,18 +15,18 @@ function ShopByCategory() {
       title: 'skincare',
       image: cosmetics,
     },
-    {
-      title: 'womens-watches',
-      image: watch,
-    },
-    {
-      title: 'sunglasses',
-      image: sunglass,
-    },
-    {
-      title: 'furniture',
-      image: furniture,
-    },
+    // {
+    //   title: 'womens-watches',
+    //   image: watch,
+    // },
+    // {
+    //   title: 'sunglasses',
+    //   image: sunglass,
+    // },
+    // {
+    //   title: 'furniture',
+    //   image: furniture,
+    // },
     {
       title: 'laptops',
       image: laptop,

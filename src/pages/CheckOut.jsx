@@ -1,9 +1,3 @@
-import {
-  CheckCircleIcon,
-  CreditCardIcon,
-  InformationCircleIcon,
-  ShoppingCartIcon,
-} from '@heroicons/react/outline';
 import CheckoutProduct from '../components/CheckoutProduct';
 import Navbar from '../components/Navbar';
 import ProgressingStep from '../components/ProgressingStep';
@@ -30,7 +24,7 @@ function CheckOut() {
 
           <div className="bg-gray-100 rounded-md md:pr-4">
             {items.map(item => (
-              <CheckoutProduct item={item} key={item.id} />
+              <CheckoutProduct item={item} key={item._id} />
             ))}
           </div>
           <div className="flex justify-between px-4 mt-4 bg-gray-100 py-1 rounded-md">
