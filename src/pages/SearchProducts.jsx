@@ -1,21 +1,22 @@
+import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import ProductCard from '../components/ProductCard';
-import axios from '../config/axiosConfig';
 import useProgress from '../hooks/useProgress';
 function SearchProducts() {
   const progress = useProgress();
   const { title } = useParams();
+  console.log(title);
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
     setProducts([]);
     const searchItems = async () => {
       try {
-        const { data } = await axios.get(`/products/search?q=${title}`);
+        const { data } = await axios.get(`/products/search?term=${title}`);
         console.log('data', data);
-        setProducts(data.products);
+        setProducts(data);
       } catch (err) {
         console.log(err);
       }

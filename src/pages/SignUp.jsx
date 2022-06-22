@@ -1,33 +1,39 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from '../config/axiosConfig';
 import { addUserInfo } from '../stores/authSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { ConnectingAirportsOutlined } from '@mui/icons-material';
 import { signUpUser } from '../services/auth';
-const from = location.state?.from?.pathname || '/';
+import axios from 'axios';
 
 function SignUp() {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const location = useLocation();
+  const [error, setError] = useState('');
 
-  const handleSignUp = e => {
+  const handleSignUp = async e => {
     e.preventDefault();
 
-    signUpUser(name, email, password).then(res => {
+    try {
+      const { data } = await axios.post('/users/register', {
+        name,
+        email,
+        password,
+      });
+
       dispatch(
         addUserInfo({
-          _id: res.data._id,
-          token: res.data.token,
-          role: res.data.role,
+          _id: data._id,
+          token: data.token,
+          role: data.role,
         })
       );
-      navigate(from, { replace: true });
-    });
+    } catch (err) {
+      console.log(err.response);
+      setError(err.response.data.message);
+    }
   };
 
   return (
@@ -75,6 +81,8 @@ function SignUp() {
               required
             />
             <br />
+
+            <p className="text-red-500">{error}</p>
 
             <button className="btn-secondary my-2">Sign up</button>
 

@@ -6,20 +6,20 @@ import { addItem } from '../stores/cartSlice';
 import Rating from '../components/Rating';
 import useProgress from '../hooks/useProgress';
 import ProductCard from '../components/ProductCard';
-import axios from '../config/axiosConfig';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import { IconButton } from '@mui/material';
+import useAuth from '../hooks/useAuth';
+import axios from 'axios';
 
 function ProductDetails() {
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const progress = useProgress();
 
   const [item, setItem] = useState(null);
   const [categoryName, setCategoryName] = useState('');
   const [categoryItems, setCategoryItems] = useState([]);
-
-  if (!item) progress.start();
-  else progress.finish();
 
   useEffect(() => {
     setItem(null);
@@ -48,14 +48,31 @@ function ProductDetails() {
     }
   };
 
+  const [wishlist, setWishlist] = useState(false);
+  async function addItemToWishList(_id) {
+    try {
+      const { data } = await axios.post('/wishLists', { _id });
+      setWishlist(data);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  const auth = useAuth();
+  useEffect(() => {
+    if (!auth.user) return;
+    axios('/wishLists/itemInWishlist/' + id)
+      .then(res => setWishlist(res.data))
+      .catch(err => console.log(err));
+  }, []);
   return (
     <>
       <Navbar />
       {item && (
         <div className="pt-4 px-3 md:px-10 grid md:grid-cols-2">
-          <div className=" place-content-center">
+          <div className="place-content-center">
             <img
-              className="w-auto object-contain"
+              className="w-[60vh] object-contain"
               src={item.images[0]}
               alt=""
             />
@@ -75,6 +92,12 @@ function ProductDetails() {
             <span className="text-xl">without shipping + handling</span>
             <br />
             <p className="my-4 text-xl text-gray-600">{item.description}</p>
+            <span
+              onClick={() => addItemToWishList(id)}
+              className="cursor-pointer"
+            >
+              {wishlist ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+            </span>
             <div className="flex justify-between">
               <button
                 onClick={() => {
@@ -110,3 +133,10 @@ function ProductDetails() {
 }
 
 export default ProductDetails;
+
+
+
+
+
+
+

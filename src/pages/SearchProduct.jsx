@@ -7,26 +7,26 @@ import Navbar from '../components/Navbar';
 import ProductForCategory from '../components/ProductForCategory';
 import ProductCard from '../components/ProductCard';
 import useProgress from '../hooks/useProgress';
-import { getProductByCategory } from '../services/product';
 import axios from 'axios';
 
-function ProductsByCategory() {
-  const { categoryName } = useParams();
+function SearchProduct() {
+  const { term } = useParams();
+  const [refetch, setRefetch] = useState(term);
+  console.log(term);
   const progress = useProgress();
+  // if (!items.length && !storeItems.length) progress.start();
+  // else progress.finish();
 
   const [isGridView, setIsGridView] = useState(false);
 
   const [items, setItems] = useState([]);
+  console.log('items', items);
   const [storeItems, setStoreItems] = useState(items);
-
-  if (!items.length && !storeItems.length) progress.start();
-  else progress.finish();
 
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(5000);
 
-  const [url, setUrl] = useState(`products/categories/${categoryName}`);
-  const baseURL = `products/categories/${categoryName}`;
+  const [url, setUrl] = useState(`products/search/${term}`);
 
   useEffect(() => {
     async function getProductByCategory() {
@@ -39,30 +39,14 @@ function ProductsByCategory() {
       }
     }
     getProductByCategory();
-  }, [url]);
-
-  let queries = {};
-
-  const generateURL = () => {
-    console.log(queries);
-    let url = baseURL;
-    Object.keys(queries).forEach((key, index) => {
-      if (index == 0) url = `${url}?${key}=${queries[key]}`;
-      else url += `&${key}=${queries[key]}`;
-    });
-
-    console.log(url);
-    return url;
-  };
+  }, [term]);
 
   const handleRangePrice = () => {
-    queries.min = minPrice;
-    queries.max = maxPrice;
-    setUrl(generateURL());
+    setUrl(`${url}min=${minPrice}&max=${maxPrice}`);
   };
   const handleSortingByPrice = value => {
-    queries.sort = value;
-    setUrl(generateURL());
+    console.log(value);
+    setUrl(`${url}sort=${value}`);
   };
 
   return (
@@ -225,13 +209,16 @@ function ProductsByCategory() {
           {isGridView ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
               {items.map(item => (
-                <ProductCard product={item} key={item._id} />
+                <ProductCard product={item} key={item._id + Math.random()} />
               ))}
             </div>
           ) : (
             <div>
               {items.map(item => (
-                <ProductForCategory product={item} key={item._id} />
+                <ProductForCategory
+                  product={item}
+                  key={item._id + Math.random()}
+                />
               ))}
             </div>
           )}
@@ -241,4 +228,4 @@ function ProductsByCategory() {
   );
 }
 
-export default ProductsByCategory;
+export default SearchProduct;

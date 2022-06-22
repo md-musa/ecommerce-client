@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 const { createSlice } = require('@reduxjs/toolkit');
 
 const user = JSON.parse(localStorage.getItem('user'));
@@ -13,6 +15,11 @@ const authSlice = createSlice({
   reducers: {
     addUserInfo: (state, action) => {
       state.user = action.payload;
+      // Setting the token in the header of the axios
+      axios.defaults.headers.common[
+        'Authorization'
+      ] = `Bearer ${action.payload.token}`;
+
       localStorage.setItem('user', JSON.stringify(action.payload));
     },
     removeUserInfo: (state, action) => {

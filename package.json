@@ -1,25 +1,26 @@
 {
-  "name": "ecommerce",
+  "name": "client",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@badrap/bar-of-progress": "^0.1.2",
-    "@emotion/react": "^11.9.0",
-    "@emotion/styled": "^11.8.1",
-    "@mui/icons-material": "^5.6.2",
-    "@mui/material": "^5.6.3",
-    "@reduxjs/toolkit": "^1.8.1",
+    "@badrap/bar-of-progress": "^0.2.1",
+    "@emotion/react": "^11.9.3",
+    "@emotion/styled": "^11.9.3",
+    "@mui/icons-material": "^5.8.4",
+    "@mui/material": "^5.8.4",
+    "@reduxjs/toolkit": "^1.8.2",
     "@testing-library/jest-dom": "^5.16.4",
-    "@testing-library/react": "^13.1.1",
+    "@testing-library/react": "^13.3.0",
     "@testing-library/user-event": "^13.5.0",
-    "axios": "^0.26.1",
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0",
-    "react-redux": "^8.0.1",
+    "axios": "^0.27.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-query": "^3.39.1",
+    "react-redux": "^8.0.2",
     "react-responsive-carousel": "^3.2.23",
     "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.1",
-    "react-toastify": "^8.2.0",
+    "react-toastify": "^9.0.4",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
@@ -47,16 +48,8 @@
     ]
   },
   "devDependencies": {
-    "autoprefixer": "^10.4.5",
-    "eslint": "^8.14.0",
-    "eslint-config-airbnb": "^19.0.4",
-    "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-jsx-a11y": "^6.5.1",
-    "eslint-plugin-prettier": "^4.0.0",
-    "eslint-plugin-react": "^7.29.4",
-    "eslint-plugin-react-hooks": "^4.5.0",
-    "eslint-plugin-tailwindcss": "^3.5.0",
-    "postcss": "^8.4.12",
-    "tailwindcss": "^3.0.24"
+    "autoprefixer": "^10.4.7",
+    "postcss": "^8.4.14",
+    "tailwindcss": "^3.1.3"
   }
 }

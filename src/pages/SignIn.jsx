@@ -2,31 +2,38 @@ import { addUserInfo } from '../stores/authSlice';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { signIn } from '../services/auth';
+import axios from 'axios';
 
 function SignIn() {
   const dispatch = useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
   const [error, setError] = useState();
-  const from = location.state?.from?.pathname || '/';
 
   const [email, setEmail] = useState('mohammad.musa706@gmail.com');
   const [password, setPassword] = useState('123456l');
 
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault();
 
-    signIn(email, password).then(res => {
+    try {
+      const { data } = await axios.post('/users/login', {
+        email,
+        password,
+      });
       dispatch(
         addUserInfo({
-          _id: res.data._id,
-          token: res.data.token,
-          role: res.data.role,
+          _id: data._id,
+          token: data.token,
+          role: data.role,
         })
       );
-      navigate(from, { replace: true });
-    });
+
+      if (location.state?.from) navigate(location.state.from);
+      else navigate('/');
+    } catch (err) {
+      setError(err.response.data.message);
+    }
   };
 
   return (

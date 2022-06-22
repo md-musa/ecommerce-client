@@ -1,57 +1,67 @@
 import userEvent from '@testing-library/user-event';
 import React, { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
-import axios from '../config/axiosConfig';
 import { useDispatch, useSelector } from 'react-redux';
 import useAuth from '../hooks/useAuth';
+import Empty from '../components/Empty';
+import ProductForCategory from '../components/ProductForCategory';
+import CheckoutProduct from '../components/CheckoutProduct';
+import axios from 'axios';
 
 function MyOrder() {
   const { user } = useAuth();
   const [orders, setOrders] = useState([]);
-  console.log('user=>', user);
-
+  console.log(orders);
   useEffect(() => {
-    axios(`/orders/${'628897dd46c73e0e74473883'}`)
-      .then(res => setOrders(res.data))
-      .catch(err => console.log(err));
+    async function getOrders() {
+      try {
+        const { data } = await axios.get('/orders/myOrders');
+        setOrders(data);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    getOrders();
   }, []);
+
+  const cancelOrder = async id => {
+    console.log('cancel order by this', id);
+  };
 
   return (
     <>
       <Navbar />
 
-      <div>
-        {orders.map(order => (
-          <table className="border w-full my-10">
-            <thead>
-              <tr className="border">
-                <th>Image</th>
-                <th>Title</th>
-                <th>Quantity</th>
-                <th>Price</th>
-              </tr>
-            </thead>
-            <tbody>
-              {order.items.map(item => (
-                <tr className="border h-10">
-                  <td>
-                    <img
-                      src={item.productId.images[0]}
-                      className="h-[100px] w-[100px]"
-                      alt=""
-                      srcset=""
-                    />
-                  </td>
-                  <td>{item.productId.title}</td>
-                  <td>{item.quantity}</td>
-                  <td>{item.productId.price}</td>
-                </tr>
+      {orders.length === 0 ? (
+        <Empty message="You did not order anything yet." />
+      ) : (
+        <div className="grid grid-cols-2 my-4">
+          {orders.map(order => (
+            <div className=' bg-gray-100 rounded p-5"'>
+              <h3 className="text-xl text-gray-700 my-1 font-semibold">
+                Order ID: {order._id}
+              </h3>
+              <h3 className="text-xl text-gray-700 my-1 font-semibold">
+                Date: {order.date}
+              </h3>
+              <button className="px-2 py-1 bg-red-100 border-2 text-lg font-semibold">
+                {order.status}
+              </button>
+
+              {order.products.map(item => (
+                <CheckoutProduct item={item.product} key={item._id} />
               ))}
-              <hr />
-            </tbody>
-          </table>
-        ))}
-      </div>
+
+              <button
+                onClick={() => cancelOrder(order._id)}
+                className="px-2 py-1 bg-red-200 text-red-600 border-2 text-lg font-semibold"
+              >
+                Cancel order
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
     </>
   );
 }

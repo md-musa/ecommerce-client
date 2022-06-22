@@ -10,10 +10,22 @@ import Rating from './Rating';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { removeItemFromCart, updateQuantity } from '../services/cart';
+import { useMutation } from 'react-query';
+import { useQueryClient } from 'react-query';
 
-function CartProduct(props) {
-  const { title, images, price, _id, rating, quantity } = props.product;
-  const dispatch = useDispatch();
+function CartProduct({ product }) {
+  const queryClient = useQueryClient();
+  const { quantity, _id } = product;
+  const { title, images, price } = product.product;
+
+  const deleteMutation = useMutation(removeItemFromCart, {
+    onSuccess: () => queryClient.invalidateQueries('cart'),
+  });
+
+  const updateQuantityMutation = useMutation(updateQuantity, {
+    onSuccess: () => queryClient.invalidateQueries('cart'),
+  });
 
   return (
     <>
@@ -40,21 +52,25 @@ function CartProduct(props) {
             <div className="flex items-center justify-between shadow-md rounded-lg border">
               <button
                 className="font-semibold p-1 hover:bg-gray-100"
-                onClick={() => dispatch(decreaseQuantity(`${_id}`))}
+                onClick={() =>
+                  updateQuantityMutation.mutate({ _id, operation: 'DECREMENT' })
+                }
               >
                 <RemoveIcon />
               </button>
               <span className="px-2 text-2xl">{quantity}</span>
               <button
                 className="font-semibold p-1 hover:bg-gray-100"
-                onClick={() => dispatch(increaseQuantity(`${_id}`))}
+                onClick={() =>
+                  updateQuantityMutation.mutate({ _id, operation: 'INCREMENT' })
+                }
               >
                 <AddIcon />
               </button>
             </div>
             <div className="flex">
               <button
-                onClick={() => dispatch(removeItem({ _id }))}
+                onClick={() => deleteMutation.mutate(_id)}
                 className="rounded-md bg-red-100 text-red-500 hover:bg-gray-100 px-2 py-1"
               >
                 <DeleteIcon />

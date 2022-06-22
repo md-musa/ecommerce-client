@@ -1,29 +1,81 @@
 Tasks
 -> class grouping 
 -> utils components
--> router setup
--> private route setup
--> 
-
--> navbar 
+->> private route setup
+->> navbar 
 -> dynamic categories
 -> filter
 -> link category product to product details
--> implement searching
--> show related products by searching category !) show without current item
--> Private Route
+->> implement searching
+->> show related products by searching category !) show without current item
 -> animation
--> test the application
 -> multi image show
 -> reset filtering
--> implement search button
+->> implement search button
 -> Best selling products
+-> tax, vat, pomo code
 
 
 
 => Bugs
--> make float number and show 2 digit after dot
--> searching items does not showing
 -> Fix z-index related issues
--> Max price will be the maximum price of all products. Min will be as well as Max price.
 -> If rating is gater than 0.5 show half star.
+
+
+dev => npm uninstall eslint eslint-plugin-import eslint-config-airbnb eslint-plugin-jsx-a11y eslint-plugin-prettier eslint-plugin-react eslint-plugin-react-hooks eslint-tailwind
+
+
+{
+  "name": "ecommerce",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@badrap/bar-of-progress": "^0.1.2",
+    "@emotion/react": "^11.9.0",
+    "@emotion/styled": "^11.8.1",
+    "@mui/icons-material": "^5.6.2",
+    "@mui/material": "^5.6.3",
+    "@reduxjs/toolkit": "^1.8.1",
+    "@testing-library/jest-dom": "^5.16.4",
+    "@testing-library/react": "^13.1.1",
+    "@testing-library/user-event": "^13.5.0",
+    "axios": "^0.26.1",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "react-redux": "^8.0.1",
+    "react-responsive-carousel": "^3.2.23",
+    "react-router-dom": "^6.3.0",
+    "react-scripts": "5.0.1",
+    "react-toastify": "^8.2.0",
+    "web-vitals": "^2.1.4"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.5",
+    "postcss": "^8.4.12",
+    "tailwindcss": "^3.0.24"
+  }
+}

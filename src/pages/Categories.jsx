@@ -1,13 +1,12 @@
+import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Category from '../components/Category';
 import Navbar from '../components/Navbar';
-import axios from '../config/axiosConfig';
 import useProgress from '../hooks/useProgress';
 
 function Categories() {
   const [categories, setCategories] = useState([]);
-  const progress = useProgress();
 
   useEffect(() => {
     async function getCategories() {
@@ -21,9 +20,6 @@ function Categories() {
     }
     getCategories();
   }, []);
-
-  if (!categories.length) progress.start();
-  else progress.finish();
 
   return (
     <>

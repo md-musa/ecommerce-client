@@ -15,30 +15,30 @@ function ShopByCategory() {
       title: 'skincare',
       image: cosmetics,
     },
-    // {
-    //   title: 'womens-watches',
-    //   image: watch,
-    // },
-    // {
-    //   title: 'sunglasses',
-    //   image: sunglass,
-    // },
-    // {
-    //   title: 'furniture',
-    //   image: furniture,
-    // },
+    {
+      title: 'watches',
+      image: watch,
+    },
+    {
+      title: 'sunglasses',
+      image: sunglass,
+    },
+    {
+      title: 'furniture',
+      image: furniture,
+    },
     {
       title: 'laptops',
       image: laptop,
     },
     {
-      title: 'mens-shoes',
+      title: 'shoes',
       image: sneaker,
     },
   ];
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3">
+    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
       {categories.map((category, index) => (
         <Category key={index} category={category} />
       ))}

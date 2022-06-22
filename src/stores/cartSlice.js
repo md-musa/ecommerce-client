@@ -1,12 +1,14 @@
 import { createSlice, current } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
+import { getCartItems } from '../services/cart';
 
 const cartSlice = createSlice({
   name: 'cart',
-  initialState: {
-    products: [],
-  },
+  initialState: {},
   reducers: {
+    addItemsToCart: (state, action) => {
+      return action.payload;
+    },
     addItem: (state, action) => {
       const newItem = action.payload;
       const quantity = newItem.quantity || 1;
@@ -43,6 +45,11 @@ const cartSlice = createSlice({
   },
 });
 
-export const { addItem, removeItem, increaseQuantity, decreaseQuantity } =
-  cartSlice.actions;
+export const {
+  addItem,
+  addItemsToCart,
+  removeItem,
+  increaseQuantity,
+  decreaseQuantity,
+} = cartSlice.actions;
 export default cartSlice.reducer;

@@ -20,7 +20,7 @@ function ProductForCategory(props) {
   const dispatch = useDispatch();
 
   return (
-    <>
+    <div>
       <div className="grid grid-cols-[1fr_3fr] my-2">
         <Link to={`/products/${_id}`}>
           <div className="flex items-center p-1 justify-center">
@@ -76,7 +76,7 @@ function ProductForCategory(props) {
         </div>
       </div>
       <hr />
-    </>
+    </div>
   );
 }
 

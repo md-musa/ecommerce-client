@@ -1,26 +1,44 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { getCartItems } from '../services/cart';
 import { Link, Navigate } from 'react-router-dom';
 import CartProduct from '../components/CartProduct';
 import shippingImg from '../assets/images/shipping.jpg';
 import Navbar from '../components/Navbar';
-import EmptyCart from '../components/EmptyCart';
+import Empty from '../components/Empty';
+import { useQuery } from 'react-query';
+import { useDispatch } from 'react-redux';
+import { addItemsToCart } from '../stores/cartSlice';
+import { useMutation } from 'react-query';
+import { useQueryClient } from 'react-query';
+import { QueryClient } from 'react-query';
+import axios from 'axios';
 
 function ShoppingCart() {
-  const cartItems = useSelector(state => state.cart.products);
+  const cart = useSelector(state => state.cart);
+  console.log('CART---', cart);
+  // console.log('Cart state', cartItems);
 
-  const subTotalPrice = cartItems.reduce(
-    (accumulator, currentItem) =>
-      accumulator + currentItem.price * currentItem.quantity,
-    0
-  );
+  const updateQuantity = async (productId, operation) => {
+    try {
+      const { data } = await axios.patch('/carts/updateQuantity', {
+        operation,
+        productId,
+      });
+      //  dispatch(addItemsToCart(data));
+      console.log(data);
+      return data;
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <>
       <Navbar />
 
-      {cartItems.length == 0 ? (
-        <EmptyCart />
+      {cart.products.length === 0 ? (
+        <Empty message="Your cart is empty" />
       ) : (
         <div className="grid md:grid-cols-[3fr_1fr]">
           <div className="p-4">
@@ -32,12 +50,17 @@ function ShoppingCart() {
 
               <hr />
 
-              {cartItems.map(item => (
-                <CartProduct product={item} key={item._id} />
+              {cart.products.map(item => (
+                <CartProduct
+                  product={item}
+                  updateQuantity={updateQuantity}
+                  // removeItemFromCart={deleteMutation}
+                  key={item._id}
+                />
               ))}
               <div className="flex justify-between mt-2 text-gray-600">
                 <p className="p-1 text-xl"> Subtotal</p>
-                <p className="p-1 text-xl">${subTotalPrice.toFixed(2)}</p>
+                <p className="p-1 text-xl">${cart.subTotal.toFixed(2)}</p>
               </div>
             </div>
           </div>
@@ -59,7 +82,7 @@ function ShoppingCart() {
 
             <div className="flex justify-between text-gray-600 subtotal">
               <p className="p-1 text-xl"> Subtotal</p>
-              <p className="p-1 text-xl">${subTotalPrice.toFixed(2)}</p>
+              <p className="p-1 text-xl">${cart.subTotal.toFixed(2)}</p>
             </div>
             <div className="flex justify-between text-gray-600 subtotal">
               <p className="p-1 text-md"> Discount</p>
@@ -68,20 +91,18 @@ function ShoppingCart() {
             <div className="flex justify-between text-gray-600 subtotal">
               <p className="p-1 text-md"> Delivery</p>
 
-              <p className="p-1 text-md">${0}</p>
+              <p className="p-1 text-md">${cart.deliveryCharge}</p>
             </div>
             <div className="flex justify-between text-gray-600">
               <p className="p-1 text-md"> Tax</p>
-              <p className="p-1 text-md">${0}</p>
+              <p className="p-1 text-md">${cart.tax.toFixed(2)}</p>
             </div>
 
             <hr className="hrDash" />
 
             <div className="flex justify-between text-gray-600 subtotal">
               <p className="p-1 text-xl font-bold"> Total</p>
-              <p className="p-1 text-xl font-bold">
-                ${subTotalPrice.toFixed(2)}
-              </p>
+              <p className="p-1 text-xl font-bold">${cart.total.toFixed(2)}</p>
             </div>
 
             <Link to="checkout">

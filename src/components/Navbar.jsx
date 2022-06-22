@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useTransition } from 'react';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { Avatar } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
@@ -11,19 +10,62 @@ import CloseIcon from '@mui/icons-material/Close';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import useAuth from '../hooks/useAuth';
 import SearchedProduct from '../components/SearchedProduct';
-import { getSearchProduct } from '../services/product';
 import AccountMenu from './AccountMenu';
+import BasicMenu from './BasicMenu';
+import { getCategories } from '../services/category';
+import { useQuery } from 'react-query';
+import { addItemsToCart } from '../stores/cartSlice';
+import { useDispatch } from 'react-redux';
+import { useQueryClient } from 'react-query';
+import axios from 'axios';
 
 function Navbar() {
   const auth = useAuth();
   const navigate = useNavigate();
-  const cartItems = useSelector(state => state.cart.products);
-  const [searchedProducts, setSearchedProducts] = useState([]);
-  const [productName, setProductName] = useState('');
+  const dispatch = useDispatch();
+  const queryClient = useQueryClient();
+
+  const [isPending, startTransition] = useTransition();
+  const cart = useSelector(state => state.cart);
+
+  const [products, setProducts] = useState([]);
+  const [title, setTitle] = useState('');
+
+  const data = useQuery('cart', async () => {
+    try {
+      const { data } = await axios('/carts');
+      console.log('CART', data);
+      dispatch(addItemsToCart(data));
+      return data;
+    } catch (err) {
+      console.log(err);
+    }
+  });
+  console.log(data);
 
   useEffect(() => {
-    getSearchProduct(productName).then(res => setSearchedProducts(res.data));
-  }, [productName]);
+    const getSearchProduct = async () => {
+      if (!title) return;
+      try {
+        const { data } = await axios(`/products/search/${title}`);
+        console.log(data);
+        setProducts(data);
+      } catch (err) {
+        console.log('error --> ', err);
+      }
+    };
+
+    getSearchProduct();
+  }, [title]);
+
+  const handleInstantSearch = e => {
+    startTransition(() => {
+      setTitle(e.target.value);
+    });
+  };
+
+  const { data: categories } = useQuery('category', getCategories);
+  console.log('category', categories);
 
   return (
     <header className="header shadow-md mt-2">
@@ -41,7 +83,7 @@ function Navbar() {
 
         {/* Search */}
         <div className="w-3/5 relative h-10 flex rounded-md items-center cursor-pointer flex-grow justify-center">
-          <div className="md:w-4/6 w-full flex shadow-md border bg-white rounded-full px-1 items-center">
+          <div className="md:w-4/6 w-full flex shadow-xl border-2 border-gray-200 bg-white rounded-full px-1 items-center">
             <select className="hidden md:inline h-auto outline-none cursor-pointer hover:bg-gray-300 shadow-sm text-gray-500 bg-gray-200 py-1 rounded-full px-2">
               <option>All categories</option>
             </select>
@@ -50,37 +92,37 @@ function Navbar() {
               type="text"
               className="py-2 px-4 w-full flex-grow rounded-l-md focus:outline-none"
               placeholder="Search..."
-              value={productName}
-              onChange={e => setProductName(e.target.value)}
+              value={title}
+              onChange={handleInstantSearch}
               onKeyDown={e => {
                 if (e.key == 'Enter') {
-                  navigate(`/product/search/${productName}`);
-                  setProductName('');
+                  navigate(`/products/search/${title}`);
+                  setTitle('');
                 }
               }}
             />
 
             <SearchIcon
               onClick={() => {
-                navigate(`/product/search/${productName}`);
-                setProductName('');
+                navigate(`/products/search/${title}`);
+                setTitle('');
               }}
               style={{ height: '32px', width: '32px' }}
               className="hidden md:inline search-icon bg-[#f95a59] mr-1 p-1 ring-2 ring-[#f95a5994] text-white rounded-full"
             />
           </div>
-          {productName && (
+          {title && (
             <div className="absolute w-full md:w-3/6 top-10 px-3 py-2 bg-gray-100">
               <div className="text-right">
                 <CloseIcon
-                  onClick={() => setProductName('')}
+                  onClick={() => setTitle('')}
                   className=" bg-gray-200 hover:bg-gray-300 rounded-full text-gray-600"
                 />
               </div>
-              {searchedProducts.map(item => (
+              {products?.map(item => (
                 <SearchedProduct
                   key={item._id}
-                  setProductName={setProductName}
+                  setProductName={setTitle}
                   product={item}
                 />
               ))}
@@ -93,7 +135,7 @@ function Navbar() {
           <Link to="/cart">
             <div className="relative space-x-2 cursor-pointer hover:underline flex items-center justify-center">
               <p className="absolute text-[#f14443] h-4 w-4 top-0 right-0 bg-[#f4c8c8] rounded-full md:right-8 flex items-center justify-center">
-                <span className="">{cartItems.length}</span>
+                <span className="">{cart.products?.length}</span>
               </p>
               <ShoppingCartIcon className="h-8 text-[#f95a59d4]" />
               <p className="font-semibold text-gray-600 hidden md:inline">
@@ -126,19 +168,12 @@ function Navbar() {
         </div>
       </div>
 
-      {/* bottom nav */}
-      <div className="relative -z-10 blur-bg flex justify-between py-2 pl-6 space-x-4 font-semibold text-gray-600">
+      {/* bottom nav -z-10*/}
+      <div className="relative flex justify-between py-2 pl-6 space-x-4 font-semibold text-gray-600">
         <div className="flex">
-          <p className="link mx-2">
-            <Link to="/categories">
-              <span className="ml-2">All</span>
-            </Link>
-          </p>
-          <p className="link mx-2">Prime Video</p>
-          <p className="link mx-2">Categories</p>
-          <p className="link mx-2">Electronics</p>
-          <p className="link mx-2 hidden lg:inline">Food & Delivery</p>
-          <p className="link mx-2 hidden lg:inline">Health & Personal Care</p>
+          {categories?.map(category => (
+            <BasicMenu category={category} key={category._id} />
+          ))}
         </div>
         <div className="hidden md:flex mx-2">
           <BookmarkBorderIcon className="mx-4 text-[#f95a59d4] cursor-pointer" />
