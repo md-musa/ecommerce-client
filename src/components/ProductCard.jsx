@@ -1,30 +1,29 @@
 import React from 'react';
 import Rating from '@mui/material/Rating';
-import { useQueryClient } from 'react-query';
-import { useMutation } from 'react-query';
-import { useDispatch } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
+import { useQueryClient, useMutation } from 'react-query';
+
+import { useNavigate } from 'react-router-dom';
 import { addItemToCart } from '../services/cart';
-import { addItem } from '../stores/cartSlice';
 
 function ProductCard(props) {
   const navigate = useNavigate();
-  const { _id, title, images, rating, price, stock, discountPercentage } =
-    props.product;
+  const queryClient = useQueryClient();
+  const {
+    _id,
+    title,
+    images,
+    rating,
+    brand,
+    price,
+    stock,
+    discountPercentage,
+  } = props.product;
 
   console.log('rating', rating);
 
   const remainingPriceAfterDiscount =
     price - (price * discountPercentage) / 100;
 
-  const dispatch = useDispatch();
-  const queryClient = useQueryClient();
-
-  // function addToCart(id, price) {
-  //   addItemToCart(id, price).then(res => console.log(res));
-
-  //   // dispatch(addItem(product));
-  // }
   const addToCartMutation = useMutation(addItemToCart, {
     onSuccess: () => queryClient.invalidateQueries('cart'),
   });
@@ -54,9 +53,12 @@ function ProductCard(props) {
         </div>
         <p
           onClick={() => navigate(`/products/${_id}`)}
-          className="my-2 hover:underline cursor-pointer font-semibold text-xl"
+          className="my-2 capitalize hover:underline cursor-pointer font-semibold text-xl"
         >
           {title}
+        </p>
+        <p className="text-green-500 bg-green-100 font-medium rounded-sm w-min uppercase px-1">
+          {brand}
         </p>
         <div className="flex items-center my-2">
           {rating > parseInt(rating) ? (
@@ -69,6 +71,7 @@ function ProductCard(props) {
           ) : (
             <Rating name="half-rating-read" defaultValue={rating} readOnly />
           )}
+          <p className="text-gray-500">{'   (05)'}</p>
         </div>
         <p className="font-semibold text-xl text-gray-700">
           ${remainingPriceAfterDiscount.toFixed(2)}
@@ -76,7 +79,7 @@ function ProductCard(props) {
         {discountPercentage > 0 && (
           <p>
             <span className="line-through text-sm text-gray-500">
-              ${price.toFixed(2)}
+              ${`${price.toFixed(2)}   `}
             </span>
             <span className="text-sm text-gray-500">
               . {discountPercentage}% off

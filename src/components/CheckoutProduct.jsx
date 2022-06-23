@@ -1,7 +1,7 @@
 import React from 'react';
 
 function CheckoutProduct(props) {
-  const { images, price, title } = props.item;
+  const { images, price, title } = props.item.product;
   return (
     <div className="grid grid-cols-[1fr_2fr] items-center py-2 rounded-md">
       <div className="flex items-center justify-center">

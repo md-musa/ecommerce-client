@@ -1,9 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import useProgress from '../hooks/useProgress';
 
 function Category(props) {
-  const progress = useProgress();
   const { image, title } = props.category;
 
   return (

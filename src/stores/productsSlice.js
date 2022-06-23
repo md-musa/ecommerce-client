@@ -1,4 +1,4 @@
-import { createSlice, current } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = [];
 
@@ -10,15 +10,8 @@ const productsSlice = createSlice({
       if (state.length) return;
       action.payload.forEach(item => state.push(item));
     },
-    removeProducts: (state, action) => {
-      return 0;
-    },
-    updateProducts: (state, action) => {
-      return null;
-    },
   },
 });
 
-export const { addProducts, removeProducts, updateProducts } =
-  productsSlice.actions;
+export const { addProducts } = productsSlice.actions;
 export default productsSlice.reducer;

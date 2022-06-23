@@ -13,8 +13,8 @@ function ProduceFeed() {
     async function fetchProducts() {
       try {
         const { data } = await axios.get(`/products`);
-        console.log(data);
-        console.log('products', data);
+        // console.log(data);
+        // console.log('products', data);
         setProducts(data);
       } catch (err) {
         console.log('Error', err.stack);

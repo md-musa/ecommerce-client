@@ -1,9 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import Category from '../components/Category';
 import Navbar from '../components/Navbar';
-import useProgress from '../hooks/useProgress';
 
 function Categories() {
   const [categories, setCategories] = useState([]);
@@ -12,7 +10,7 @@ function Categories() {
     async function getCategories() {
       try {
         const { data } = await axios.get('/categories');
-        console.log(data);
+        // console.log(data);c
         setCategories(data);
       } catch (err) {
         console.log(err);
@@ -31,11 +29,9 @@ function Categories() {
 
             <ul>
               {category.subCategories.map(sub => (
-                <>
-                  <Link to={`/categories/${sub.name}`}>
-                    <li key={sub._id}> {'===>' + sub.name}</li>
-                  </Link>
-                </>
+                <Link to={`/categories/${sub.name}`}>
+                  <li key={sub._id}> {`===>${sub.name}`}</li>
+                </Link>
               ))}
             </ul>
           </>

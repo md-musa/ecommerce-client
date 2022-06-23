@@ -3,9 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import ProductCard from '../components/ProductCard';
-import useProgress from '../hooks/useProgress';
 function SearchProducts() {
-  const progress = useProgress();
   const { title } = useParams();
   console.log(title);
   const [products, setProducts] = useState([]);
@@ -24,8 +22,6 @@ function SearchProducts() {
     searchItems();
   }, [title]);
 
-  if (!products.length) progress.start();
-  else progress.finish();
   return (
     <>
       <Navbar />

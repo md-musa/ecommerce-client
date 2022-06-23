@@ -4,10 +4,7 @@ import Category from './Category';
 // import bicycle from '../assets/images/bicycle2.jpg';
 import cosmetics from '../assets/images/cosmetics.jpg';
 import laptop from '../assets/images/laptop.jpg';
-import sneaker from '../assets/images/sneker2.jpg';
-import watch from '../assets/images/watch2.jpg';
 import furniture from '../assets/images/sofa.jpg';
-import sunglass from '../assets/images/sunglass.jpg';
 
 function ShopByCategory() {
   const categories = [
@@ -17,11 +14,12 @@ function ShopByCategory() {
     },
     {
       title: 'watches',
-      image: watch,
+      image:
+        'https://i.ibb.co/2n797kX/daniel-korpai-hb-TKIbu-Mm-BI-unsplash.jpg',
     },
     {
-      title: 'sunglasses',
-      image: sunglass,
+      title: 'head phone',
+      image: 'https://i.ibb.co/SNgWqYt/kiran-ck-LSNJ-pltdu8-unsplash.jpg',
     },
     {
       title: 'furniture',
@@ -33,7 +31,7 @@ function ShopByCategory() {
     },
     {
       title: 'shoes',
-      image: sneaker,
+      image: 'https://i.ibb.co/CKkjn8g/izzy-gibson-ut-q-Kclcm-BI-unsplash.jpg',
     },
   ];
 

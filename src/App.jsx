@@ -1,5 +1,6 @@
 import { Route, Routes } from 'react-router-dom';
 import React from 'react';
+import axios from 'axios';
 import ShoppingCart from './pages/ShoppingCart';
 import Home from './pages/Home';
 import NotFound from './components/NotFound';
@@ -9,41 +10,40 @@ import ProductDetails from './pages/ProductDetails';
 import Categories from './pages/Categories';
 import ProductsByCategory from './pages/ProductsByCategory';
 import SignIn from './pages/SignIn';
-import SearchProducts from './pages/SearchProducts';
 import MyOrder from './pages/MyOrder';
 import WishList from './pages/WishList';
 import MyAccount from './pages/MyAccount';
 import PrivateRoutes from './components/PrivateRoutes';
 import SearchProduct from './pages/SearchProduct';
-import { useQueryClient } from 'react-query';
-import axios from 'axios';
-import { useQuery } from 'react-query';
-import { getTodos } from './services/test';
+
+// 'http://localhost:5000/api'
+// ecommerce50.herokuapp.com/api
 
 const user = JSON.parse(localStorage.getItem('user'));
-//'http://localhost:5000/api'
-axios.defaults.baseURL = 'https://ecommerce50.herokuapp.com/api';
-if (user)
-  axios.defaults.headers.common['Authorization'] = `Bearer ${user.token}`;
+axios.defaults.baseURL = 'http://localhost:5000/api';
+if (user) {
+  axios.defaults.headers.common.Authorization = `Bearer ${user.token}`;
+}
 
 export default function App() {
   return (
     <Routes>
       {/* Public routes */}
       <Route path="/" element={<Home />} />
-      <Route path="/signUp" element={<SignUp />} />
-      <Route path="/signIn" element={<SignIn />} />
       <Route path="/categories" element={<Categories />} />
-      <Route
-        path="/categories/:categoryName"
-        element={<ProductsByCategory />}
-      />
-      <Route path="/cart" element={<ShoppingCart />} />
+      <Route path="/categories/:category" element={<ProductsByCategory />} />
       <Route path="/products/:id" element={<ProductDetails />} />
       <Route path="/products/search/:term" element={<SearchProduct />} />
+      {!user && (
+        <>
+          <Route path="/signUp" element={<SignUp />} />
+          <Route path="/signIn" element={<SignIn />} />
+        </>
+      )}
 
       {/* Protected routes */}
       <Route element={<PrivateRoutes />}>
+        <Route path="/cart" element={<ShoppingCart />} />
         <Route path="/myOrder" element={<MyOrder />} />
         <Route path="/wishList" element={<WishList />} />
         <Route path="/myAccount" element={<MyAccount />} />

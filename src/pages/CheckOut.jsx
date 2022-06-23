@@ -1,14 +1,12 @@
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import CheckoutProduct from '../components/CheckoutProduct';
 import Navbar from '../components/Navbar';
 import ProgressingStep from '../components/ProgressingStep';
-import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
 
 function CheckOut() {
-  const items = useSelector(state => state.cart.products);
-  const subTotalPrice = items.reduce((accumulator, currentItem) => {
-    return accumulator + currentItem.price * currentItem.quantity;
-  }, 0);
+  const cart = useSelector(state => state.cart);
+  console.log('Cart', cart);
   return (
     <>
       <Navbar />
@@ -23,7 +21,7 @@ function CheckOut() {
           </p>
 
           <div className="bg-gray-100 rounded-md md:pr-4">
-            {items.map(item => (
+            {cart.products.map(item => (
               <CheckoutProduct item={item} key={item._id} />
             ))}
           </div>
@@ -32,7 +30,7 @@ function CheckOut() {
               Total
             </h1>
             <span className="font-bold  text-xl md:text-2xl text-gray-600">
-              ${subTotalPrice.toFixed(2)}
+              ${cart.total}
             </span>
           </div>
         </div>

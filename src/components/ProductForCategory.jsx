@@ -6,7 +6,6 @@ import {
 } from '../stores/cartSlice';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import Rating from './Rating';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import DeleteIcon from '@mui/icons-material/Delete';

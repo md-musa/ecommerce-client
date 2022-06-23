@@ -6,21 +6,16 @@ import Rating from '@mui/material/Rating';
 import Navbar from '../components/Navbar';
 import ProductForCategory from '../components/ProductForCategory';
 import ProductCard from '../components/ProductCard';
-import useProgress from '../hooks/useProgress';
 import axios from 'axios';
 
 function SearchProduct() {
   const { term } = useParams();
   const [refetch, setRefetch] = useState(term);
-  console.log(term);
-  const progress = useProgress();
-  // if (!items.length && !storeItems.length) progress.start();
-  // else progress.finish();
 
   const [isGridView, setIsGridView] = useState(false);
 
   const [items, setItems] = useState([]);
-  console.log('items', items);
+  // console.log('items', items);
   const [storeItems, setStoreItems] = useState(items);
 
   const [minPrice, setMinPrice] = useState(0);

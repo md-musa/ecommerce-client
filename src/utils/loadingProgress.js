@@ -6,8 +6,10 @@ const progress = new ProgressBar({
   className: 'z-100',
   delay: 70,
 });
-function useProgress() {
-  return progress;
-}
 
-export default useProgress;
+const indicateLoadingProgress = condition => {
+  if (condition) progress.start();
+  else progress.finish();
+};
+
+export default indicateLoadingProgress;

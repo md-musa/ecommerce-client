@@ -1,23 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
-import { getCartItems } from '../services/cart';
-import { Link, Navigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import axios from 'axios';
 import CartProduct from '../components/CartProduct';
 import shippingImg from '../assets/images/shipping.jpg';
 import Navbar from '../components/Navbar';
 import Empty from '../components/Empty';
-import { useQuery } from 'react-query';
-import { useDispatch } from 'react-redux';
-import { addItemsToCart } from '../stores/cartSlice';
-import { useMutation } from 'react-query';
-import { useQueryClient } from 'react-query';
-import { QueryClient } from 'react-query';
-import axios from 'axios';
 
 function ShoppingCart() {
   const cart = useSelector(state => state.cart);
-  console.log('CART---', cart);
-  // console.log('Cart state', cartItems);
 
   const updateQuantity = async (productId, operation) => {
     try {
@@ -25,7 +16,6 @@ function ShoppingCart() {
         operation,
         productId,
       });
-      //  dispatch(addItemsToCart(data));
       console.log(data);
       return data;
     } catch (err) {
@@ -65,17 +55,14 @@ function ShoppingCart() {
             </div>
           </div>
 
-          <div className="sticky top-0 px-8 pb-2 mt-4 h-max rounded-md shadow-lg md:py-2 md:px-4">
+          <div className="sticky top-0 px-8 pb-2 mt-4 bg-white h-max rounded-md shadow-lg border-2 border-gray-100 md:py-2 md:px-4">
             <h1 className="p-2 mb-1 text-2xl font-bold"> Checkout</h1>
             <input
-              className="com-input shadow-sm"
+              className="com-input bg-white border-2 border-gray-100"
               type="text"
               placeholder="Promo code"
             />
-            <button
-              className="btn-primary
-            "
-            >
+            <button className="btn-primary mt-3" type="button">
               Apply
             </button>
             <hr className="hrDash" />
@@ -106,10 +93,7 @@ function ShoppingCart() {
             </div>
 
             <Link to="checkout">
-              <button
-                className="btn-primary
-            "
-              >
+              <button className="btn-primary" type="button">
                 Proceed
               </button>
             </Link>
@@ -117,6 +101,7 @@ function ShoppingCart() {
               <button
                 className="btn-secondary
             "
+                type="button"
               >
                 Continue Shopping
               </button>

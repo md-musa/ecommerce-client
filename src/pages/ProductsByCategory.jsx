@@ -6,27 +6,20 @@ import Rating from '@mui/material/Rating';
 import Navbar from '../components/Navbar';
 import ProductForCategory from '../components/ProductForCategory';
 import ProductCard from '../components/ProductCard';
-import useProgress from '../hooks/useProgress';
-import { getProductByCategory } from '../services/product';
 import axios from 'axios';
 
 function ProductsByCategory() {
-  const { categoryName } = useParams();
-  const progress = useProgress();
-
+  const { categoryName: category } = useParams();
   const [isGridView, setIsGridView] = useState(false);
 
   const [items, setItems] = useState([]);
   const [storeItems, setStoreItems] = useState(items);
 
-  if (!items.length && !storeItems.length) progress.start();
-  else progress.finish();
-
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(5000);
 
-  const [url, setUrl] = useState(`products/categories/${categoryName}`);
-  const baseURL = `products/categories/${categoryName}`;
+  const [url, setUrl] = useState(`products/categories/${category}`);
+  const baseURL = `products/categories/${category}`;
 
   useEffect(() => {
     async function getProductByCategory() {
