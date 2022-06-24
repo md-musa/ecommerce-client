@@ -2,7 +2,8 @@ import axios from 'axios';
 
 export const getCartItems = async () => {
   try {
-    return await axios.get('/carts');
+    const { data } = await axios.get('/carts');
+    return data;
   } catch (err) {
     console.error(err);
   }

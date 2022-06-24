@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
+import { useQuery } from 'react-query';
 import { useSelector } from 'react-redux';
 import CheckoutProduct from '../components/CheckoutProduct';
 import Navbar from '../components/Navbar';
 import ProgressingStep from '../components/ProgressingStep';
+import { getCartItems } from '../services/cart';
+import indicateLoadingProgress from '../utils/loadingProgress';
 
 function CheckOut() {
-  const cart = useSelector(state => state.cart);
-  console.log('Cart', cart);
+  const { isLoading, data: cart } = useQuery('cart', getCartItems);
+  indicateLoadingProgress(isLoading);
+
   return (
     <>
       <Navbar />
@@ -21,7 +25,7 @@ function CheckOut() {
           </p>
 
           <div className="bg-gray-100 rounded-md md:pr-4">
-            {cart.products.map(item => (
+            {cart?.products?.map(item => (
               <CheckoutProduct item={item} key={item._id} />
             ))}
           </div>
@@ -30,7 +34,7 @@ function CheckOut() {
               Total
             </h1>
             <span className="font-bold  text-xl md:text-2xl text-gray-600">
-              ${cart.total}
+              ${cart?.total}
             </span>
           </div>
         </div>

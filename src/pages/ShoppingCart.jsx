@@ -6,9 +6,16 @@ import CartProduct from '../components/CartProduct';
 import shippingImg from '../assets/images/shipping.jpg';
 import Navbar from '../components/Navbar';
 import Empty from '../components/Empty';
+import authSlice from '../stores/authSlice';
+import { getCartItems } from '../services/cart';
+import indicateLoadingProgress from '../utils/loadingProgress';
+import { useQuery } from 'react-query';
 
 function ShoppingCart() {
-  const cart = useSelector(state => state.cart);
+  const { isLoading, data: cart } = useQuery('cart', getCartItems);
+  console.log('CART==> ', cart);
+
+  // indicateLoadingProgress(isLoading);
 
   const updateQuantity = async (productId, operation) => {
     try {
@@ -26,8 +33,7 @@ function ShoppingCart() {
   return (
     <>
       <Navbar />
-
-      {cart.products.length === 0 ? (
+      {cart?.products?.length === 0 ? (
         <Empty message="Your cart is empty" />
       ) : (
         <div className="grid md:grid-cols-[3fr_1fr]">
@@ -40,7 +46,7 @@ function ShoppingCart() {
 
               <hr />
 
-              {cart.products.map(item => (
+              {cart?.products?.map(item => (
                 <CartProduct
                   product={item}
                   updateQuantity={updateQuantity}

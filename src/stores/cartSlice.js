@@ -3,7 +3,7 @@ import { toast } from 'react-toastify';
 
 const cartSlice = createSlice({
   name: 'cart',
-  initialState: {},
+  initialState: [],
   reducers: {
     addItemsToCart: (state, action) => action.payload,
     addItem: (state, action) => {

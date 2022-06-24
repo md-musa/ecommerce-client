@@ -19,45 +19,18 @@ import { useDispatch } from 'react-redux';
 import { useQueryClient } from 'react-query';
 import axios from 'axios';
 import { IconButton } from '@mui/material';
+import { getCartItems } from '../services/cart';
+import { getProductBySearching } from '../services/product';
 
 function Navbar() {
-  const auth = useAuth();
+  const user = useAuth();
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const queryClient = useQueryClient();
-
+  const [searchTerm, setTitle] = useState('');
   const [isPending, startTransition] = useTransition();
-  const cart = useSelector(state => state.cart);
 
-  const [products, setProducts] = useState([]);
-  const [title, setTitle] = useState('');
-
-  const data = useQuery('cart', async () => {
-    try {
-      const { data } = await axios('/carts');
-      // console.log('CART', data);
-      dispatch(addItemsToCart(data));
-      return data;
-    } catch (err) {
-      console.log(err);
-    }
-  });
-  console.log(data);
-
-  useEffect(() => {
-    const getSearchProduct = async () => {
-      if (!title) return;
-      try {
-        const { data } = await axios(`/products/search/${title}`);
-        // console.log(data);
-        setProducts(data);
-      } catch (err) {
-        console.log('error --> ', err);
-      }
-    };
-
-    getSearchProduct();
-  }, [title]);
+  const { isLoading, data: products } = useQuery(['search', searchTerm], () =>
+    getProductBySearching(searchTerm)
+  );
 
   const handleInstantSearch = e => {
     startTransition(() => {
@@ -71,6 +44,8 @@ function Navbar() {
   function expandSearchBar() {
     setExpand(true);
   }
+
+  const { data: cart } = useQuery('cart', getCartItems);
 
   return (
     <header className="header shadow-md mt-2">
@@ -102,12 +77,12 @@ function Navbar() {
               type="text"
               className="py-2 px-4 w-full flex-grow rounded-l-md focus:outline-none"
               placeholder="Search..."
-              value={title}
+              value={searchTerm}
               onClick={expandSearchBar}
               onChange={handleInstantSearch}
               onKeyDown={e => {
                 if (e.key == 'Enter') {
-                  navigate(`/products/search/${title}`);
+                  navigate(`/products/search/${searchTerm}`);
                   setTitle('');
                 }
               }}
@@ -115,14 +90,14 @@ function Navbar() {
 
             <SearchIcon
               onClick={() => {
-                navigate(`/products/search/${title}`);
+                navigate(`/products/search/${searchTerm}`);
                 setTitle('');
               }}
               style={{ height: '32px', width: '32px' }}
               className="hidden md:inline search-icon bg-[#f95a59] mr-1 p-1 ring-2 ring-[#f95a5994] text-white rounded-full"
             />
           </div>
-          {title && (
+          {searchTerm && (
             <div className="absolute w-full md:w-3/6 top-10 px-3 py-2 bg-gray-100">
               <div className="text-right">
                 <CloseIcon
@@ -146,16 +121,18 @@ function Navbar() {
           <div className="w-auto flex items-center justify-end text-xs md:text-base space-x-2 md:space-x-6 md:mx-6 whitespace-nowrap">
             <Link to="/cart">
               <div className="relative space-x-2 cursor-pointer hover:underline flex items-center justify-center">
-                <p className="absolute text-[#f14443] h-4 w-4 top-0 right-0 bg-[#f4c8c8] rounded-full md:right-8 flex items-center justify-center">
-                  <span className="">{cart.products?.length}</span>
-                </p>
+                {user && (
+                  <p className="absolute text-[#f14443] h-4 w-4 top-0 right-0 bg-[#eed2d2] rounded-full font-semibold p-[2px] md:right-0 z-10 flex items-center justify-center">
+                    <span className="">{cart?.products?.length}</span>
+                  </p>
+                )}
                 <IconButton>
                   <ShoppingCartIcon className="h-8 text-[#f95a59d4]" />
                 </IconButton>
               </div>
             </Link>
             <div className="cursor-pointer hover:underline flex items-center relative">
-              {auth.user ? (
+              {user ? (
                 <AccountMenu />
               ) : (
                 <Link to="/signIn">
@@ -164,7 +141,7 @@ function Navbar() {
                   </button>
                 </Link>
               )}
-              {!auth.user && (
+              {!user && (
                 <div className="hidden md:inline">
                   <FiberManualRecordIcon
                     className="text-red-500 absolute -right-0 -top-2"

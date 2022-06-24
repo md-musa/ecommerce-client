@@ -17,10 +17,10 @@ import PrivateRoutes from './components/PrivateRoutes';
 import SearchProduct from './pages/SearchProduct';
 
 // 'http://localhost:5000/api'
-// ecommerce50.herokuapp.com/api
+// https://ecommerce50.herokuapp.com/api
 
 const user = JSON.parse(localStorage.getItem('user'));
-axios.defaults.baseURL = 'http://localhost:5000/api';
+axios.defaults.baseURL = 'https://ecommerce50.herokuapp.com/api';
 if (user) {
   axios.defaults.headers.common.Authorization = `Bearer ${user.token}`;
 }
