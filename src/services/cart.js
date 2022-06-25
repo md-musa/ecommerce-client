@@ -1,8 +1,10 @@
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 export const getCartItems = async () => {
   try {
     const { data } = await axios.get('/carts');
+
     return data;
   } catch (err) {
     console.error(err);
@@ -15,6 +17,11 @@ export const addItemToCart = async ({ _id, price }) => {
       productId: _id,
       price,
     });
+    if (data) {
+      toast.success('Product added to cart!', {
+        position: 'top-right',
+      });
+    }
     return data;
   } catch (err) {
     console.error(err);

@@ -19,8 +19,6 @@ function ProductCard(props) {
     discountPercentage,
   } = props.product;
 
-  console.log('rating', rating);
-
   const remainingPriceAfterDiscount =
     price - (price * discountPercentage) / 100;
 

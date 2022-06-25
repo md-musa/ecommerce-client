@@ -3,7 +3,7 @@ import axios from 'axios';
 const { createSlice } = require('@reduxjs/toolkit');
 
 const user = JSON.parse(localStorage.getItem('user'));
-console.log('user', user);
+console.log('user-->', user);
 
 const initialState = {
   user: user || null,

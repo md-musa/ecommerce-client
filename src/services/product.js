@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 export const getBestSellingProducts = async () => {
   try {
@@ -18,5 +19,26 @@ export const getProductBySearching = async title => {
     return data;
   } catch (err) {
     console.log('error --> ', err);
+  }
+};
+
+export async function getProductDetails(id) {
+  try {
+    const { data } = await axios.get(`/products/${id}`);
+    window.scrollTo(0, 0);
+    return data;
+    // getProductByCategory(data.category);
+  } catch (err) {
+    console.log('Error=>', err);
+  }
+}
+
+export const getProductByCategory = async category => {
+  try {
+    const { data } = await axios.get(`products/categories/${category}`);
+    return data;
+  } catch (error) {
+    console.log(error);
+    toast.error(error);
   }
 };

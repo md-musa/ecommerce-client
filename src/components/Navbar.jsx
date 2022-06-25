@@ -23,7 +23,8 @@ import { getCartItems } from '../services/cart';
 import { getProductBySearching } from '../services/product';
 
 function Navbar() {
-  const user = useAuth();
+  const { user } = useAuth();
+  // console.log('nav user=> ', user.token);
   const navigate = useNavigate();
   const [searchTerm, setTitle] = useState('');
   const [isPending, startTransition] = useTransition();
@@ -123,7 +124,7 @@ function Navbar() {
               <div className="relative space-x-2 cursor-pointer hover:underline flex items-center justify-center">
                 {user && (
                   <p className="absolute text-[#f14443] h-4 w-4 top-0 right-0 bg-[#eed2d2] rounded-full font-semibold p-[2px] md:right-0 z-10 flex items-center justify-center">
-                    <span className="">{cart?.products?.length}</span>
+                    <span className="">{cart?.products?.length || 0}</span>
                   </p>
                 )}
                 <IconButton>
