@@ -67,8 +67,12 @@ function Navbar() {
         {/* Search */}
         <div className="w-3/5 relative h-10 flex rounded-md items-center cursor-pointer flex-grow justify-center">
           <div
-            // style={expand && { borderRadius: '15px', margin: 'auto 15px' }}
-            className=" w-full md:w-4/6  rounded-full overflow-hidden flex shadow-xl border-2 border-gray-200 bg-white px-1 items-center"
+            style={
+              searchTerm
+                ? { borderRadius: '20px 20px 0 0' }
+                : { borderRadius: '999px' }
+            }
+            className=" w-full md:w-4/6 overflow-hidden flex shadow-xl border-2 border-gray-200 bg-white px-1 items-center"
           >
             <select className="hidden md:inline h-auto outline-none cursor-pointer hover:bg-gray-300 shadow-sm text-gray-500 bg-gray-200 py-1 rounded-full px-2">
               <option>All categories</option>
@@ -98,8 +102,9 @@ function Navbar() {
               className="hidden md:inline search-icon bg-[#f95a59] mr-1 p-1 ring-2 ring-[#f95a5994] text-white rounded-full"
             />
           </div>
+
           {searchTerm && (
-            <div className="absolute w-full md:w-3/6 top-10 px-3 py-2 bg-gray-100">
+            <div className="absolute z-10 w-full md:w-4/6 top-10 px-3 py-2 bg-white border-b-2 border-x-2 border-gray-200">
               <div className="text-right">
                 <CloseIcon
                   onClick={() => setTitle('')}

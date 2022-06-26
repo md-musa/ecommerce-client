@@ -6,7 +6,6 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import { IconButton, Rating } from '@mui/material';
 import axios from 'axios';
 import useAuth from '../hooks/useAuth';
-
 import ProductCard from '../components/ProductCard';
 import { addItem } from '../stores/cartSlice';
 import Navbar from '../components/Navbar';

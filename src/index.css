@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
 @layer base {
   .link {
     @apply hover:underline cursor-pointer;
