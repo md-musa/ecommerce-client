@@ -12,10 +12,9 @@ import indicateLoadingProgress from '../utils/loadingProgress';
 import { useQuery } from 'react-query';
 
 function ShoppingCart() {
-  const { isLoading, data: cart } = useQuery('cart', getCartItems);
-  console.log('CART==> ', cart);
+  const { isLoading, data: cart } = getCartItems();
 
-  // indicateLoadingProgress(isLoading);
+  indicateLoadingProgress(isLoading);
 
   const updateQuantity = async (productId, operation) => {
     try {
@@ -56,7 +55,7 @@ function ShoppingCart() {
               ))}
               <div className="flex justify-between mt-2 text-gray-600">
                 <p className="p-1 text-xl"> Subtotal</p>
-                <p className="p-1 text-xl">${cart.subTotal.toFixed(2)}</p>
+                <p className="p-1 text-xl">${cart?.subTotal.toFixed(2)}</p>
               </div>
             </div>
           </div>
@@ -75,7 +74,7 @@ function ShoppingCart() {
 
             <div className="flex justify-between text-gray-600 subtotal">
               <p className="p-1 text-xl"> Subtotal</p>
-              <p className="p-1 text-xl">${cart.subTotal.toFixed(2)}</p>
+              <p className="p-1 text-xl">${cart?.subTotal.toFixed(2)}</p>
             </div>
             <div className="flex justify-between text-gray-600 subtotal">
               <p className="p-1 text-md"> Discount</p>
@@ -84,18 +83,18 @@ function ShoppingCart() {
             <div className="flex justify-between text-gray-600 subtotal">
               <p className="p-1 text-md"> Delivery</p>
 
-              <p className="p-1 text-md">${cart.deliveryCharge}</p>
+              <p className="p-1 text-md">${cart?.deliveryCharge}</p>
             </div>
             <div className="flex justify-between text-gray-600">
               <p className="p-1 text-md"> Tax</p>
-              <p className="p-1 text-md">${cart.tax.toFixed(2)}</p>
+              <p className="p-1 text-md">${cart?.tax.toFixed(2)}</p>
             </div>
 
             <hr className="hrDash" />
 
             <div className="flex justify-between text-gray-600 subtotal">
               <p className="p-1 text-xl font-bold"> Total</p>
-              <p className="p-1 text-xl font-bold">${cart.total.toFixed(2)}</p>
+              <p className="p-1 text-xl font-bold">${cart?.total.toFixed(2)}</p>
             </div>
 
             <Link to="checkout">

@@ -18,6 +18,7 @@ import {
   addItemToWishlist,
   isExistItemInsideWishlist,
 } from '../services/wishlist';
+import { addItemToCart } from '../services/cart';
 
 function ProductDetails() {
   const { id } = useParams();
@@ -43,9 +44,11 @@ function ProductDetails() {
     isExistItemInsideWishlist(id)
   );
 
-  console.log('wishli', wishlist);
-
   const wishlistMutation = useMutation(addItemToWishlist);
+
+  const addToCartMutation = useMutation(addItemToCart, {
+    onSuccess: () => queryClient.invalidateQueries('cart'),
+  });
 
   return (
     <>
@@ -105,7 +108,7 @@ function ProductDetails() {
             >
               <IconButton>
                 {wishlist ? (
-                  <FavoriteIcon />
+                  <FavoriteIcon style={{ color: '#f46463' }} />
                 ) : (
                   <FavoriteBorderIcon style={{ color: '#f46463' }} />
                 )}
@@ -116,7 +119,10 @@ function ProductDetails() {
                 <>
                   <button
                     onClick={() => {
-                      dispatch(addItem(item));
+                      addToCartMutation.mutate({
+                        _id: item._id,
+                        price: item.price,
+                      });
                       navigate('/cart');
                     }}
                     className="p-2 rounded-sm w-2/5 hover:bg-gray-200 shadow-md my-2 bg-gray-100 text-gray-700 text-xl"
@@ -125,7 +131,12 @@ function ProductDetails() {
                     Buy Now
                   </button>
                   <button
-                    onClick={() => dispatch(addItem(item))}
+                    onClick={() =>
+                      addToCartMutation.mutate({
+                        _id: item._id,
+                        price: item.price,
+                      })
+                    }
                     className="p-2 rounded-sm w-2/5 hover:bg-yellow-600 shadow-md my-2 bg-yellow-500 text-xl"
                     type="button"
                   >

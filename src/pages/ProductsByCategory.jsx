@@ -4,9 +4,12 @@ import ViewComfyIcon from '@mui/icons-material/ViewComfy';
 import { useParams } from 'react-router-dom';
 import Rating from '@mui/material/Rating';
 import Navbar from '../components/Navbar';
-import ProductForCategory from '../components/ProductForCategory';
+import WideProductCard from '../components/WideProductCard';
 import ProductCard from '../components/ProductCard';
 import axios from 'axios';
+import { useMutation } from 'react-query';
+import { addItemToCart } from '../services/cart';
+import { useQueryClient } from 'react-query';
 
 function ProductsByCategory() {
   const { categoryName: category } = useParams();
@@ -104,61 +107,6 @@ function ProductsByCategory() {
             </button>
           </div>
           <hr />
-
-          {/* <div className="my-4">
-            <p className="font-bold text-lg my-1">Grade</p>
-            <div className="flex items-center">
-              <input
-                type="radio"
-                onChange={e => shortByRating(e.target.value)}
-                name="5start"
-                value={5}
-                id=""
-              />
-              <label htmlFor="5start">
-                <Rating name="half-rating-read" defaultValue={5} readOnly />
-              </label>
-            </div>
-            <div className="flex items-center">
-              <input
-                onChange={e => shortByRating(e.target.value)}
-                name="5start"
-                value={4}
-                type="radio"
-                name="5start"
-                id=""
-              />
-              <label htmlFor="5start">
-                <Rating name="half-rating-read" defaultValue={4} readOnly />
-              </label>
-            </div>
-            <div className="flex items-center">
-              <input
-                onChange={e => shortByRating(e.target.value)}
-                name="5start"
-                value={3}
-                type="radio"
-                name="5start"
-                id=""
-              />
-              <label htmlFor="5start">
-                <Rating name="half-rating-read" defaultValue={3} readOnly />
-              </label>
-            </div>
-            <div className="flex items-center">
-              <input
-                onChange={e => shortByRating(e.target.value)}
-                name="5start"
-                value={2}
-                type="radio"
-                name="5start"
-                id=""
-              />
-              <label htmlFor="5start">
-                <Rating name="half-rating-read" defaultValue={2} readOnly />
-              </label>
-            </div>
-          </div> */}
         </div>
 
         {/* Right section */}
@@ -224,7 +172,7 @@ function ProductsByCategory() {
           ) : (
             <div>
               {items.map(item => (
-                <ProductForCategory product={item} key={item._id} />
+                <WideProductCard product={item} key={item._id} />
               ))}
             </div>
           )}

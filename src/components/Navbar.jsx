@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useTransition } from 'react';
+import React, { useEffect, useRef, useState, useTransition } from 'react';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -14,20 +14,17 @@ import AccountMenu from './AccountMenu';
 import BasicMenu from './BasicMenu';
 import { getCategories } from '../services/category';
 import { useQuery } from 'react-query';
-import { addItemsToCart } from '../stores/cartSlice';
-import { useDispatch } from 'react-redux';
-import { useQueryClient } from 'react-query';
-import axios from 'axios';
 import { IconButton } from '@mui/material';
 import { getCartItems } from '../services/cart';
 import { getProductBySearching } from '../services/product';
+import useOnClickOutside from '../hooks/useOnClickOutside';
 
 function Navbar() {
   const { user } = useAuth();
-  // console.log('nav user=> ', user.token);
   const navigate = useNavigate();
   const [searchTerm, setTitle] = useState('');
   const [isPending, startTransition] = useTransition();
+  const { data: cart } = getCartItems();
 
   const { isLoading, data: products } = useQuery(['search', searchTerm], () =>
     getProductBySearching(searchTerm)
@@ -42,11 +39,16 @@ function Navbar() {
   const { data: categories } = useQuery('category', getCategories);
 
   const [expand, setExpand] = useState(false);
+  const ref = useRef();
+
+  useOnClickOutside(ref, () => {
+    setTitle('');
+    setExpand(false);
+  });
+
   function expandSearchBar() {
     setExpand(true);
   }
-
-  const { data: cart } = useQuery('cart', getCartItems);
 
   return (
     <header className="header shadow-md mt-2">
@@ -65,7 +67,10 @@ function Navbar() {
         )}
 
         {/* Search */}
-        <div className="w-3/5 relative h-10 flex rounded-md items-center cursor-pointer flex-grow justify-center">
+        <div
+          ref={ref}
+          className="w-3/5 relative h-10 flex rounded-md items-center cursor-pointer flex-grow justify-center"
+        >
           <div
             style={
               searchTerm

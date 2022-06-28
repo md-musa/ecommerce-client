@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import ProductCard from '../components/ProductCard';
 import Navbar from '../components/Navbar';
 import Empty from '../components/Empty';
-import ProductForCategory from '../components/ProductForCategory';
+import WideProductCard from '../components/WideProductCard';
 import { IconButton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import axios from 'axios';
@@ -39,7 +39,7 @@ function WishList() {
           </p>
           {wishList.map(item => (
             <div className="relative w-full">
-              <ProductForCategory key={item._id} product={item} />
+              <WideProductCard key={item._id} product={item} />
               <span
                 onClick={() => removeItemFromWishList(item._id)}
                 className="absolute right-2 top-2 cursor-pointer"

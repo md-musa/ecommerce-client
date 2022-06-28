@@ -1,14 +1,19 @@
 import axios from 'axios';
+import { useQuery } from 'react-query';
 import { toast } from 'react-toastify';
 
-export const getCartItems = async () => {
-  try {
-    const { data } = await axios.get('/carts');
+// const { isLoading, data: cart } = console.log('CART==> ', cart);
 
-    return data;
-  } catch (err) {
-    console.error(err);
-  }
+export const getCartItems = function getCartItems() {
+  return useQuery('cart', async () => {
+    try {
+      const { data } = await axios.get('/carts');
+
+      return data;
+    } catch (err) {
+      console.error(err);
+    }
+  });
 };
 
 export const addItemToCart = async ({ _id, price }) => {

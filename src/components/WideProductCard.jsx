@@ -11,12 +11,20 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import { Link } from 'react-router-dom';
+import { useQueryClient } from 'react-query';
+import { useMutation } from 'react-query';
 
 function ProductForCategory(props) {
+  const queryClient = useQueryClient();
+
   const { title, images, price, _id, rating } = props.product;
 
   const [quantity, setQuantity] = useState(1);
   const dispatch = useDispatch();
+
+  const addToCartMutation = useMutation(addItemToCart, {
+    onSuccess: () => queryClient.invalidateQueries('cart'),
+  });
 
   return (
     <div>
@@ -62,9 +70,7 @@ function ProductForCategory(props) {
             </div>
             <div className="flex">
               <button
-                onClick={() =>
-                  dispatch(addItem({ ...props.product, quantity }))
-                }
+                onClick={() => addToCartMutation.mutate({ _id, price })}
                 className="rounded-md text-sm md:text-md border hover:shadow:md bg-gray-100 shadow-md text-gray-600 hover:bg-gray-200 px-3 py-1"
               >
                 <AddShoppingCartIcon className="" />

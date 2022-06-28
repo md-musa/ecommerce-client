@@ -4,7 +4,7 @@ import ViewComfyIcon from '@mui/icons-material/ViewComfy';
 import { useParams } from 'react-router-dom';
 import Rating from '@mui/material/Rating';
 import Navbar from '../components/Navbar';
-import ProductForCategory from '../components/ProductForCategory';
+import WideProductCard from '../components/WideProductCard';
 import ProductCard from '../components/ProductCard';
 import axios from 'axios';
 
@@ -210,7 +210,7 @@ function SearchProduct() {
           ) : (
             <div>
               {items.map(item => (
-                <ProductForCategory
+                <WideProductCard
                   product={item}
                   key={item._id + Math.random()}
                 />

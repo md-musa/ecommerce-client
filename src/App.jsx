@@ -15,17 +15,19 @@ import WishList from './pages/WishList';
 import MyAccount from './pages/MyAccount';
 import PrivateRoutes from './components/PrivateRoutes';
 import SearchProduct from './pages/SearchProduct';
+import useAuth from './hooks/useAuth';
 
 // 'http://localhost:5000/api'
 // https://ecommerce50.herokuapp.com/api
 
-const user = JSON.parse(localStorage.getItem('user'));
+const _user = JSON.parse(localStorage.getItem('user'));
 axios.defaults.baseURL = 'https://ecommerce50.herokuapp.com/api';
-if (user) {
-  axios.defaults.headers.common.Authorization = `Bearer ${user.token}`;
+if (_user) {
+  axios.defaults.headers.common.Authorization = `Bearer ${_user.token}`;
 }
 
 export default function App() {
+  const { user } = useAuth();
   return (
     <Routes>
       {/* Public routes */}
