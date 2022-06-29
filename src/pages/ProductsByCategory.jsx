@@ -2,21 +2,18 @@ import React, { useEffect, useState } from 'react';
 import TableRowsIcon from '@mui/icons-material/TableRows';
 import ViewComfyIcon from '@mui/icons-material/ViewComfy';
 import { useParams } from 'react-router-dom';
-import Rating from '@mui/material/Rating';
 import Navbar from '../components/Navbar';
 import WideProductCard from '../components/WideProductCard';
 import ProductCard from '../components/ProductCard';
 import axios from 'axios';
-import { useMutation } from 'react-query';
-import { addItemToCart } from '../services/cart';
-import { useQueryClient } from 'react-query';
+import { useQuery } from 'react-query';
+import { getProductByCategory } from '../services/product';
+import indicateLoadingProgress from '../utils/loadingProgress';
+import Empty from '../components/Empty';
 
 function ProductsByCategory() {
-  const { categoryName: category } = useParams();
+  const { category } = useParams();
   const [isGridView, setIsGridView] = useState(false);
-
-  const [items, setItems] = useState([]);
-  const [storeItems, setStoreItems] = useState(items);
 
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(5000);
@@ -24,18 +21,12 @@ function ProductsByCategory() {
   const [url, setUrl] = useState(`products/categories/${category}`);
   const baseURL = `products/categories/${category}`;
 
-  useEffect(() => {
-    async function getProductByCategory() {
-      try {
-        const { data } = await axios(url);
-        setItems(data);
-        setStoreItems(data);
-      } catch (err) {
-        console.log(err);
-      }
-    }
-    getProductByCategory();
-  }, [url]);
+  const { isLoading, data: products } = useQuery(
+    ['productByCategory', url, category],
+    () => getProductByCategory(url)
+  );
+
+  indicateLoadingProgress(isLoading);
 
   let queries = {};
 
@@ -61,6 +52,15 @@ function ProductsByCategory() {
     setUrl(generateURL());
   };
 
+  // If product is empty then show a empty page
+  if (products?.length === 0)
+    return (
+      <>
+        <Navbar />
+        <Empty message={'Product not found'} />
+      </>
+    );
+
   return (
     <>
       <Navbar />
@@ -81,6 +81,7 @@ function ProductsByCategory() {
           </div>
           <hr /> */}
 
+          {/* Price range */}
           <div className="my-2 text-gray-700 space-y-3">
             <p className="font-bold text-lg">Price range</p>
             <div className="flex items-center">
@@ -115,7 +116,9 @@ function ProductsByCategory() {
             <div>
               <p className="font-semibold text-gray-600 text-sm md:text-lg">
                 {`Shown ${
-                  items.length < 10 ? `0${items.length}` : items.length
+                  products?.length < 10
+                    ? `0${products?.length}`
+                    : products?.length
                 } items`}
               </p>
             </div>
@@ -150,7 +153,7 @@ function ProductsByCategory() {
                 className="mx-2 cursor-pointer active:cursor-not-allowed"
               />
 
-              {/* Sorting order */}
+              {/* Sort by price */}
               <select
                 onChange={e => handleSortingByPrice(e.target.value)}
                 id="order"
@@ -163,15 +166,16 @@ function ProductsByCategory() {
             </div>
           </div>
 
+          {/* Product card variants */}
           {isGridView ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-              {items.map(item => (
+              {products?.map(item => (
                 <ProductCard product={item} key={item._id} />
               ))}
             </div>
           ) : (
             <div>
-              {items.map(item => (
+              {products?.map(item => (
                 <WideProductCard product={item} key={item._id} />
               ))}
             </div>

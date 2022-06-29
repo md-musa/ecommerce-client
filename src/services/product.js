@@ -33,7 +33,7 @@ export async function getProductDetails(id) {
   }
 }
 
-export const getProductByCategory = async category => {
+export const getRelatedProducts = async category => {
   try {
     const { data } = await axios.get(`products/categories/${category}`);
     return data;
@@ -42,3 +42,12 @@ export const getProductByCategory = async category => {
     toast.error(error);
   }
 };
+
+export async function getProductByCategory(url) {
+  try {
+    const { data } = await axios(url);
+    return data;
+  } catch (err) {
+    console.log(err);
+  }
+}

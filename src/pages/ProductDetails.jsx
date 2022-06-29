@@ -10,7 +10,11 @@ import ProductCard from '../components/ProductCard';
 import { addItem } from '../stores/cartSlice';
 import Navbar from '../components/Navbar';
 import { useQuery } from 'react-query';
-import { getProductByCategory, getProductDetails } from '../services/product';
+import {
+  getProductByCategory,
+  getProductDetails,
+  getRelatedProducts,
+} from '../services/product';
 import indicateLoadingProgress from '../utils/loadingProgress';
 import { useMutation } from 'react-query';
 import { useQueryClient } from 'react-query';
@@ -34,7 +38,7 @@ function ProductDetails() {
 
   const { data: relatedProducts } = useQuery(
     ['productByCategory', item?.category],
-    () => getProductByCategory(item?.category),
+    () => getRelatedProducts(item?.category),
     {
       enabled: !!item?.category,
     }
@@ -50,18 +54,22 @@ function ProductDetails() {
     onSuccess: () => queryClient.invalidateQueries('cart'),
   });
 
+  const remainingPriceAfterDiscount =
+    item?.price - (item?.price * item?.discountPercentage) / 100;
+  console.log('rem', remainingPriceAfterDiscount);
   return (
     <>
       <Navbar />
       {item && (
         <div className="pt-4 px-3 md:px-10 grid md:grid-cols-2">
+          {/* Product images */}
           <div className="relative place-content-center">
             <img
-              className="w-[60vh] object-contain"
+              className="object-contain p-2 md:p-5 rounded-md "
               src={item?.images[0]}
               alt=""
             />
-            {/* Out of stock indicator */}
+            {/*  Stock out indicator */}
             {item?.stock === 0 && (
               <img
                 className="absolute w-3/5 top-1/4"
@@ -70,6 +78,7 @@ function ProductDetails() {
               />
             )}
           </div>
+
           <div className="">
             <h3 className="text-gray-600 capitalize text-4xl my-3">
               {item?.title}
@@ -78,6 +87,7 @@ function ProductDetails() {
               {item?.brand}
             </p>
 
+            {/* Product rating */}
             <div className="flex items-center my-2">
               {item?.rating > parseInt(item?.rating) ? (
                 <Rating
@@ -93,12 +103,24 @@ function ProductDetails() {
                   readOnly
                 />
               )}
-              <p className="text-gray-500">{'   (05)'}</p>
+              <p className="text-gray-500">{` (${item?.reviews.length})`}</p>
             </div>
 
-            <span className="font-bold text-2xl">
-              ${`${parseFloat(item?.price)} `}
-            </span>
+            {/* Product's price and discount indicator */}
+            <p className="font-semibold text-xl text-gray-700">
+              ${remainingPriceAfterDiscount.toFixed(2)}
+            </p>
+            {item?.discountPercentage > 0 && (
+              <p>
+                <span className="line-through text-sm text-gray-500">
+                  ${`${item?.price.toFixed(2)}   `}
+                </span>
+                <span className="text-sm text-gray-500">
+                  . {item?.discountPercentage}% off
+                </span>
+              </p>
+            )}
+
             <small className="text-gray-500">without shipping & handling</small>
             <br />
             <p className="my-4 text-xl text-gray-600">{item?.description}</p>
