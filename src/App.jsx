@@ -19,8 +19,8 @@ import useAuth from './hooks/useAuth';
 import PaymentSuccess from './pages/PaymentSuccess';
 import PaymentCanceled from './pages/PaymentCanceled';
 
-const baseURL = 'http://localhost:5000/api';
-// const baseURL = 'https://ecommerce50.herokuapp.com/api'
+// const baseURL = 'http://localhost:5000/api';
+const baseURL = 'https://ecommerce50.herokuapp.com/api';
 
 const _user = JSON.parse(localStorage.getItem('user'));
 axios.defaults.baseURL = baseURL;
