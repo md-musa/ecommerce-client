@@ -16,12 +16,14 @@ import MyAccount from './pages/MyAccount';
 import PrivateRoutes from './components/PrivateRoutes';
 import SearchProduct from './pages/SearchProduct';
 import useAuth from './hooks/useAuth';
+import PaymentSuccess from './pages/PaymentSuccess';
+import PaymentCanceled from './pages/PaymentCanceled';
 
-// 'http://localhost:5000/api'
-// https://ecommerce50.herokuapp.com/api
+const baseURL = 'http://localhost:5000/api';
+// const baseURL = 'https://ecommerce50.herokuapp.com/api'
 
 const _user = JSON.parse(localStorage.getItem('user'));
-axios.defaults.baseURL = 'https://ecommerce50.herokuapp.com/api';
+axios.defaults.baseURL = baseURL;
 if (_user) {
   axios.defaults.headers.common.Authorization = `Bearer ${_user.token}`;
 }
@@ -36,6 +38,8 @@ export default function App() {
       <Route path="/categories/:category" element={<ProductsByCategory />} />
       <Route path="/products/:id" element={<ProductDetails />} />
       <Route path="/products/search/:term" element={<SearchProduct />} />
+      <Route path="/order/payment/success" element={<PaymentSuccess />} />
+      <Route path="/order/payment/canceled" element={<PaymentCanceled />} />
       {!user && (
         <>
           <Route path="/signUp" element={<SignUp />} />

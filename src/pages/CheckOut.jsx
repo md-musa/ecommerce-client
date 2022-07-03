@@ -1,6 +1,8 @@
+import axios from 'axios';
 import React, { useState } from 'react';
 import { useQuery } from 'react-query';
 import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 import CheckoutProduct from '../components/CheckoutProduct';
 import Navbar from '../components/Navbar';
 import ProgressingStep from '../components/ProgressingStep';
@@ -14,8 +16,6 @@ function CheckOut() {
   return (
     <>
       <Navbar />
-      <ProgressingStep />
-
       <div className="grid md:grid-cols-2">
         <div className="px-10">
           <h1 className="font-bold text-2xl">Summary Order</h1>
@@ -24,16 +24,18 @@ function CheckOut() {
             order item.
           </p>
 
+          <p className="font-bold pb-3">{cart?.products.length} ITEMS</p>
+
           <div className="bg-gray-100 rounded-md md:pr-4">
             {cart?.products?.map(item => (
               <CheckoutProduct item={item} key={item._id} />
             ))}
           </div>
           <div className="flex justify-between px-4 mt-4 bg-gray-100 py-1 rounded-md">
-            <h1 className="font-bold text-xl md:text-2xl text-gray-600">
+            <h1 className="font-semibold text-xl md:text-2xl text-gray-600">
               Total
             </h1>
-            <span className="font-bold  text-xl md:text-2xl text-gray-600">
+            <span className="font-semibold  text-xl md:text-2xl text-gray-600">
               ${cart?.total}
             </span>
           </div>
@@ -81,8 +83,8 @@ function CheckOut() {
             />
             <br />
 
-            <button className="btn-primary text-white font-bold" type="text">
-              Save and Deliver Here
+            <button onClick={handlePayment} className="btn-primary" type="text">
+              Proceed to Pay
             </button>
           </form>
         </div>

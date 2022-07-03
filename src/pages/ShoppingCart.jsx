@@ -10,6 +10,7 @@ import authSlice from '../stores/authSlice';
 import { getCartItems } from '../services/cart';
 import indicateLoadingProgress from '../utils/loadingProgress';
 import { useQuery } from 'react-query';
+import { toast } from 'react-toastify';
 
 function ShoppingCart() {
   const { isLoading, data: cart } = getCartItems();
@@ -26,6 +27,27 @@ function ShoppingCart() {
       return data;
     } catch (err) {
       console.log(err);
+    }
+  };
+
+  const handlePayment = async cartId => {
+    if (!cartId) {
+      toast.error('Cart id is not found');
+      return;
+    }
+
+    try {
+      const res = await axios.post('/payment/create-checkout-session', {
+        cartId,
+      });
+      console.log('Payment', res);
+
+      if (res.status === 200) {
+        window.location.href = res.data.url;
+      }
+    } catch (err) {
+      console.log(err);
+      toast.error(err);
     }
   };
 
@@ -49,7 +71,6 @@ function ShoppingCart() {
                 <CartProduct
                   product={item}
                   updateQuantity={updateQuantity}
-                  // removeItemFromCart={deleteMutation}
                   key={item._id}
                 />
               ))}
@@ -97,11 +118,14 @@ function ShoppingCart() {
               <p className="p-1 text-xl font-bold">${cart?.total.toFixed(2)}</p>
             </div>
 
-            <Link to="checkout">
-              <button className="btn-primary" type="button">
-                Proceed
-              </button>
-            </Link>
+            <button
+              onClick={() => handlePayment(cart?._id)}
+              className="btn-primary text-gray-700"
+              type="button"
+            >
+              Proceed to Checkout
+            </button>
+
             <Link to="/">
               <button
                 className="btn-secondary
