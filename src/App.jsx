@@ -40,12 +40,11 @@ export default function App() {
       <Route path="/products/search/:term" element={<SearchProduct />} />
       <Route path="/order/payment/success" element={<PaymentSuccess />} />
       <Route path="/order/payment/canceled" element={<PaymentCanceled />} />
-      {!user && (
-        <>
-          <Route path="/signUp" element={<SignUp />} />
-          <Route path="/signIn" element={<SignIn />} />
-        </>
-      )}
+      <Route path="/signUp" element={<SignUp />} />
+      <Route path="/signIn" element={<SignIn />} />
+
+      {/* {!user && ( */}
+      {/* )} */}
 
       {/* Protected routes */}
       <Route element={<PrivateRoutes />}>
